@@ -1,0 +1,24 @@
+<!doctype html>
+<html ng-app="centoAuthoring">
+  <head>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.5.2/select2.css" />
+    <link rel="stylesheet" href="/vendor.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      MSG_DATABASE = '{{msg_database}}';
+    </script>
+
+
+    <!-- user -->
+    <!-- <script type="text/javascript" src="/blockly.js"></script> -->
+    <script type="text/javascript" src="/vendor.js"></script>
+    <script type="text/javascript" src="/bundle.js"></script>
+  </head>
+
+  <body ng-controller="RootCtrl">
+    {% block content %}{% endblock %}
+  </body>
+
+</html>
+
