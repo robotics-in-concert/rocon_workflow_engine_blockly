@@ -2,7 +2,7 @@ var spawn = require('child_process').spawn,
   _ = require('lodash'),
   Promise = require('bluebird'),
   Engine = require('./engine'),
-  ResourceManager = require('./src/resource_manager'),
+  ResourceManager = require('./resource_manager'),
   util = require('util'),
   Settings = require('./model').Settings,
   Requester = require('./requester').Requester,
@@ -132,7 +132,7 @@ EngineManager.prototype.startEngine = function(extras){
 
   logger.info('engine options', engine_opts);
 
-  var child = spawn('node', ['./engine_runner.js', '--option', JSON.stringify(engine_opts)], {stdio: ['pipe', 'pipe', 'pipe', 'ipc']})
+  var child = spawn('node', [__dirname + '/engine_runner.js', '--option', JSON.stringify(engine_opts)], {stdio: ['pipe', 'pipe', 'pipe', 'ipc']})
   global.childEngine = child;
 
   logger.info("engine spawn pid :", child.pid);

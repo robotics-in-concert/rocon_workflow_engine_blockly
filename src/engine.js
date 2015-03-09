@@ -13,7 +13,7 @@ var _ = require('lodash'),
   Requester = require('./requester').Requester,
   Resource = require('./requester').Resource,
   UUID = require('node-uuid'),
-  Ros = require('./src/ros'),
+  Ros = require('./ros'),
   URL = require('url');
 
 

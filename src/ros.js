@@ -3,7 +3,7 @@ var _ = require('lodash'),
   Promise = require('bluebird'),
   EventEmitter2 = require('eventemitter2').EventEmitter2,
   ROSLIB = require('roslib'),
-  Utils = require('../utils'),
+  Utils = require('./utils'),
   process_send2 = Utils.process_send2,
   util = require('util');
 

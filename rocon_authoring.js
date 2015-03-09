@@ -28,42 +28,36 @@ MongoClient.connect(process.env.ROCON_AUTHORING_MONGO_URL, function(e, db){
   if(e) throw e;
 
 
+  var app = express(); 
+  var server = http.createServer(app);
+  var io = socketio(server);
+  io.use(socketio_wildcard());
+  io.of('/engine/client').use(socketio_wildcard());
 
-  /*
-   * Express
-   */
-  if(argv.web){
+  $io = io;
 
-    var app = express(); 
-    var server = http.createServer(app);
-    var io = socketio(server);
-    io.use(socketio_wildcard());
-    io.of('/engine/client').use(socketio_wildcard());
-
-    $io = io;
-
-    io.on('connection', function(sock){
-    });
+  io.on('connection', function(sock){
+  });
 
 
-    app.use(express.static('public'));
-    app.use(bodyParser.json({limit: '50mb'}));
+  app.use(express.static('public'));
+  app.use(bodyParser.json({limit: '50mb'}));
 
-    // This is where all the magic happens!
-    app.engine('html', swig.renderFile);
+  // This is where all the magic happens!
+  app.engine('html', swig.renderFile);
 
-    app.set('view engine', 'html');
-    app.set('views', __dirname + '/views');
+  app.set('view engine', 'html');
+  app.set('views', __dirname + '/views');
 
-    app.set('view cache', false);
-    swig.setDefaults({ cache: false });
+  app.set('view cache', false);
+  swig.setDefaults({ cache: false });
 
 
-    require('./routes')(app, db);
+  require('./routes')(app, db);
 
-    server = server.listen(process.env.ROCON_AUTHORING_SERVER_PORT, function(){
-      logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
-    });
+  server = server.listen(process.env.ROCON_AUTHORING_SERVER_PORT, function(){
+    logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
+  });
 
 
 
