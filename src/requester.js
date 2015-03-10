@@ -3,7 +3,6 @@
 
 var _ = require('lodash'),
     Promise = require('bluebird'),
-    async = require('async'),
     Util = require('util'),
     EventEmitter = require('events').EventEmitter,
     UUID = require('node-uuid');
