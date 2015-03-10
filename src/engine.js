@@ -163,7 +163,7 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
 
   var timer = setInterval(function(){
     if(!fiber.stopped){
-      engine.ros.getTopics(function(topics){
+      engine.ros.underlying.getTopics(function(topics){
         var remapped_topics = R.filter(function(t){ return R.contains(t, required_topics); })(topics);
         console.log('topic count check : ', [remapped_topics.length, required_topics.length].join("/"), remapped_topics, required_topics);
 
@@ -227,7 +227,7 @@ Engine.prototype._scheduled = function(rapp, uri, remappings, parameters, topics
   
   var r = new Requester(this);
 
-  this.ros.getTopics(function(topics){
+  this.ros.underlying.getTopics(function(topics){
     engine.log("topics : ", topics);
 
     var res = new Resource();
@@ -244,7 +244,7 @@ Engine.prototype._scheduled = function(rapp, uri, remappings, parameters, topics
       var topics_ready = new Promise(function(resolve, reject){
 
         var timer = setInterval(function(){
-          engine.ros.getTopics(function(topics){
+          engine.ros.underlying.getTopics(function(topics){
 
             
             var remapped_topics = R.filter(R.match("^"+name))(topics);
@@ -277,16 +277,14 @@ Engine.prototype._changeResourceRefCount = function(rid, delta){
 };
 
 Engine.prototype.incResourceRefCount = function(rid){
-  return _changeResourceRefCount(rid, +1);
 };
 
 Engine.prototype.decResourceRefCount = function(rid){
-  return _changeResourceRefCount(rid, -1);
 };
 
 
 Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, onFeedback){
-  var name = _.detect(ctx.remappings, {remap_from: topic}).remap_to;
+  var name = _.detect(ctx.remappings, {remap_from: name}).remap_to;
   var engine = this;
 
   var required_topics = _.map(["feedback", "result", "status"], function(suffix){ return name + "/" + suffix});
@@ -294,7 +292,6 @@ Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, 
 
 
   engine._waitForTopicsReadyF(required_topics);
-  this.incResourceRefCount(ctx.req_id);
   this.ros.run_action(name, type, goal, 
     function(items){ 
       onResult(items); 
@@ -309,7 +306,6 @@ Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, 
 Engine.prototype.scheduledSubscribe = function(ctx, topic, type, callback){
   var name = _.detect(ctx.remappings, {remap_from: topic}).remap_to;
   this.ros.subscribe(name, type, callback);
-  this.incResourceRefCount(ctx.req_id);
   
 };
 
@@ -317,7 +313,6 @@ Engine.prototype.scheduledSubscribe = function(ctx, topic, type, callback){
 Engine.prototype.scheduledPublish = function(ctx, topic, type, msg){
   var name = _.detect(ctx.remappings, {remap_from: topic}).remap_to;
   this.ros.publish(name, type, msg);
-  this.incResourceRefCount(ctx.req_id);
 
 };
 
@@ -336,7 +331,7 @@ Engine.prototype.clear = function(){
   this.executions = [];
 
   var proms = _.map(this.my_dynamic_resource_ids, function(rid){
-    return process_send2({cmd: 'release_resource', requester_id: rid});
+    return process_send2({cmd: 'release_resource', requester_id: req_id});
 
   });
   return Promise.all(proms).then(function(){
