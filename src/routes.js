@@ -40,7 +40,39 @@ module.exports = function(app, db){
   });
 
   app.get('/ui/:name', function(req, res){
-    res.send(global.engineManager.ui_manager.ui);
+    var name = req.params.name;
+
+    var meta = global.engineManager.ui_manager.ui[name];
+    
+    if(!meta){
+      var el = '<div id="container" vertical layout>no ui found.</div>'
+    }else{
+      console.log(meta);
+
+
+      var _build = function(meta){
+        if(meta.type == 'vertical' || meta.type == 'horizontal'){
+
+          if(meta.children){
+            var childrenEl = _.map(meta.children, function(c){
+              return _build(c);
+            }).join("");
+          }
+          return '<div layout '+meta.type+'>'+childrenEl+'</div>';
+
+        }else if(meta.type == 'button'){
+          return '<rocon-button flex>Button</rocon-button>';
+        }
+
+      };
+
+      
+      var el = '<div id="container" vertical layout>'+_build(meta[0])+'</div>'
+    }
+    console.log(el);
+
+    // res.send(global.engineManager.ui_manager.ui);
+    res.render('ui', {el:el});
   });
 
   app.get('/api/param/:key', function(req, res){
