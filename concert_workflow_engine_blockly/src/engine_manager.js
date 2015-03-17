@@ -3,6 +3,7 @@ var spawn = require('child_process').spawn,
   Promise = require('bluebird'),
   Engine = require('./engine'),
   ResourceManager = require('./resource_manager'),
+  UIManager = require('./ui_manager'),
   util = require('util'),
   Requester = require('./requester').Requester,
   Resource = require('./requester').Resource,
@@ -36,6 +37,7 @@ var EngineManager = function(io, options){
 
   });
 
+  this.ui_manager = new UIManager();
   this.resource_manager = new ResourceManager(ros);
   this.resource_manager.onAny(function(){
     that.broadcastResourcesInfo();
@@ -333,6 +335,10 @@ EngineManager.prototype._bindEvents = function(child){
       case 'socket_broadcast':
         that.io.of(msg.namespace).emit(msg.key, msg.msg);
         result = true
+        break;
+
+      case 'create_ui':
+        result = that.ui_manager.newUI(msg.name, msg.meta);
         break;
 
       default:
