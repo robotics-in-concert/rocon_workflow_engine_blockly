@@ -19,7 +19,7 @@
 
 
   </style>
-  <div class="tile" horizontal layout center-justified center flex>
+  <div class="tile" horizontal layout center-justified center flex on-tap="{{handleTap}}">
     <div><content></content></div>
   </div>
   <!-- <paper-button flex raised>Button</paper-button></div> -->
@@ -27,7 +27,15 @@
 
 
   <script>
-    Polymer({});
+    Polymer('rocon-button', {
+      handleTap: function(){
+        this.fire('core-signal', {name: 'rocon-button', data: 'x'});
+        console.log('core signal fired');
+
+
+
+      }
+    });
   </script>
 
 </polymer-element>

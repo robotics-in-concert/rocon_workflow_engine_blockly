@@ -13,6 +13,7 @@
 
   <link rel="import" href="/components/font-roboto/roboto.html">
   <link rel="import" href="/polymer_components/rocon-button.html">
+  <link rel="import" href="/components/core-signals/core-signals.html">
 
   <style>
   html,body {
@@ -45,10 +46,9 @@
 
 <body unresolved>
   <template id="tpl0" is="auto-binding">
+    <core-signals on-core-signal-rocon-button="{{newData}}"></core-signals>
     <style>
       #container {
-        
-
       }
 
     </style>
@@ -61,6 +61,12 @@
     scope.foo = "Some value"
 
     scope.change_attr = function(){
+
+    };
+
+    scope.newData = function(e, detail, sender){
+      console.log(arguments);
+
 
     };
 

@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.5",
-    "font-roboto": "Polymer/font-roboto#~0.5.5"
+    "font-roboto": "Polymer/font-roboto#~0.5.5",
+    "core-signals": "Polymer/core-signals#~0.5.5"
   }
 }
