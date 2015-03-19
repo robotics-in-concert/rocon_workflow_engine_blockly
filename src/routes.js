@@ -13,6 +13,13 @@ module.exports = function(app, db){
 
   };
 
+
+  app.post('/api/ros/publish', function(req, res){
+    engineManager.ros.publish(req.body.topic, req.body.type, req.body.message);
+    res.send('ok');
+
+  });
+
   app.get('/', function(req, res){
     res.render('engine');
   });
