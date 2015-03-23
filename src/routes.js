@@ -65,7 +65,7 @@ module.exports = function(app, db){
               return _build(c);
             }).join("");
           }
-          return '<div layout '+meta.type+'>'+childrenEl+'</div>';
+          return '<div flex layout '+meta.type+'>'+childrenEl+'</div>';
 
         }else if(meta.type == 'button'){
           return '<rocon-button flex>Button</rocon-button>';

@@ -6,22 +6,31 @@
   <template>
   <style>
     :host {
-      display: flex;
-      cursor: pointer;
-
-    }
-    .tile {
       margin: 4px;
+      padding: 10px;
       border: solid 1px #aaa;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
 
     }
+    #wrapper { 
+      display: block;
+      flex: 1;
+      text-align: center;
+    }
+
 
 
 
   </style>
-  <div class="tile" horizontal layout center-justified center flex on-tap="{{handleTap}}">
-    <div><content></content></div>
-  </div>
+  <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
+    <div id="wrapper">
+      <content align-center></content>
+    </div>
+  <!-- <div class="tile" center on-tap="{{handleTap}}"> -->
+    <!-- <content></content> -->
+  <!-- </div> -->
   <!-- <paper-button flex raised>Button</paper-button></div> -->
   </template>
 
