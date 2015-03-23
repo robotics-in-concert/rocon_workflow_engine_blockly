@@ -1,5 +1,5 @@
 <link rel="import" href="../components/polymer/polymer.html">
-<polymer-element name="rocon-text" attributes="value" >
+<polymer-element name="rocon-text" attributes="text" >
   <template>
   <style>
     :host {
@@ -25,7 +25,7 @@
   </style>
   <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
     <div id="wrapper">
-      <content align-center></content>
+      <div align-center>{{text}}</div>
     </div>
   </template>
 
