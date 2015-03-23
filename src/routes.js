@@ -69,9 +69,9 @@ module.exports = function(app, db){
           return '<div flex layout '+meta.type+'>'+childrenEl+'</div>';
 
         }else if(meta.type == 'button'){
-          return '<rocon-button flex roconId="'+meta.name+'">'+meta.text+'</rocon-button>';
+          return '<rocon-button flex rocon_id="'+meta.name+'">'+meta.text+'</rocon-button>';
         }else if(meta.type == 'text'){
-          return '<rocon-text flex roconId="'+meta.name+'">'+meta.text+'</rocon-button>';
+          return '<rocon-text flex rocon_id="'+meta.name+'">'+meta.text+'</rocon-button>';
         }
 
 

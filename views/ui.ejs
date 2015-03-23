@@ -52,7 +52,34 @@
 
   </template>
   <script src="http://cdn.jsdelivr.net/g/superagent"></script>
+  <script src="/socket.io/socket.io.js" type="text/javascript"></script>
   <script>
+    // TODO fix url
+    var io = io('http://localhost:8888/ui');
+    io.on('connect', function(data){
+      console.log('io connected');
+
+    });
+    io.on('data', function(data){
+      data = JSON.parse(data.data);
+      console.log(data);
+
+      var eid = data.rocon_id;
+      var selector = '*[rocon_id='+eid+']';
+      console.log(selector);
+
+      var e = document.querySelector(selector);
+      console.log(e);
+
+      if(e){
+        e.setAttribute(data.attr, data.value);
+        console.log('here');
+
+      }
+      console.log(data);
+
+
+    });
     var scope = document.querySelector('#tpl0');
     console.log(scope);
 

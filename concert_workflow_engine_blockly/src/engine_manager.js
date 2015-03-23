@@ -24,6 +24,13 @@ var EngineManager = function(io, options){
   this.resource_pool_status = null;
   ros.once('status.ready', function(){
 
+    ros.subscribe('to-rocon-ui', 'std_msgs/String', function(payload){
+      console.log('to-rocon-ui received. payload : ', payload);
+
+      io.of('/ui')
+        .emit('data', payload);
+    });
+
     ros.subscribe('/concert/scheduler/resource_pool', 'scheduler_msgs/KnownResources', function(payload){
       logger.debug("POOL", payload);
       that.resource_pool_status = payload;
@@ -80,7 +87,10 @@ var EngineManager = function(io, options){
       }
 
     });
+  });
 
+  this.io.of('/ui').on('connection', function(socket){
+    logger.info('socket.io (/ui) client connected id:%s', socket.id);
   });
 
 };
