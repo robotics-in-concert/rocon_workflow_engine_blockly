@@ -15,6 +15,7 @@ module.exports = function(app, db){
 
 
   app.post('/api/ros/publish', function(req, res){
+    logger.debug('publish', req.body);
     engineManager.ros.publish(req.body.topic, req.body.type, req.body.message);
     res.send('ok');
 
@@ -68,8 +69,11 @@ module.exports = function(app, db){
           return '<div flex layout '+meta.type+'>'+childrenEl+'</div>';
 
         }else if(meta.type == 'button'){
-          return '<rocon-button flex>Button</rocon-button>';
+          return '<rocon-button flex roconId="'+meta.name+'">'+meta.text+'</rocon-button>';
+        }else if(meta.type == 'text'){
+          return '<rocon-text flex roconId="'+meta.name+'">'+meta.text+'</rocon-button>';
         }
+
 
       };
 

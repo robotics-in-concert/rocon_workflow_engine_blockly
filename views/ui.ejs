@@ -67,7 +67,7 @@
 
       superagent
         .post('/api/ros/publish')
-        .send({topic: 'from-rocon-button', type: 'std_msgs/String', message: {data: 'Hello world'}})
+        .send({topic: 'from-rocon-ui', type: 'std_msgs/String', message: {data: JSON.stringify(detail)}})
         .end(function(e, res){
           console.log(res.text);
 

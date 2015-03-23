@@ -2,7 +2,7 @@
 
 <link rel="import" href="../components/polymer/polymer.html">
 <!-- <link rel="import" href="../components/paper-button/paper-button.html"> -->
-<polymer-element name="rocon-button" role="button">
+<polymer-element name="rocon-button" role="button" attributes="roconId">
   <template>
   <style>
     :host {
@@ -26,8 +26,8 @@
 
   </style>
   <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
-    <div id="wrapper">
-      <content align-center></content>
+    <div id="wrapper" on-tap="{{handleTap}}">
+      <content align-center></content> ({{roconId}})
     </div>
   <!-- <div class="tile" center on-tap="{{handleTap}}"> -->
     <!-- <content></content> -->
@@ -39,7 +39,7 @@
   <script>
     Polymer('rocon-button', {
       handleTap: function(){
-        this.fire('core-signal', {name: 'rocon-button', data: 'x'});
+        this.fire('core-signal', {name: 'rocon-button', data: {'event': 'tap', id: this.roconId}});
         console.log('core signal fired');
 
 
