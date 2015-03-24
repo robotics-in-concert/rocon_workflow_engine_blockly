@@ -71,7 +71,7 @@ module.exports = function(app, db){
         }else if(meta.type == 'button'){
           return '<rocon-button flex rocon_id="'+meta.name+'" text="'+meta.text+'"></rocon-button>';
         }else if(meta.type == 'text'){
-          return '<rocon-text flex rocon_id="'+meta.name+'" text="'+meta.text+'"></rocon-button>';
+          return '<rocon-text flex rocon_id="'+meta.name+'" text="'+meta.text+'"></rocon-text>';
         }
 
 
