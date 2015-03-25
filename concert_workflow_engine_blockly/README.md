@@ -98,7 +98,6 @@ export ROCON_COMPOSER_BLOCKLY_LOG_LEVEL=info
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT` : The port to run web interface.
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL` : Rosbridge websocket URL (eg. ws://127.0.0.1:9090)
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL` : mongodb connection URL (eg. mongodb://localhost:27017/rocon_authoring)
-  - `MSG_DATABASE` : message database server address (eg. http://localhost:10000)
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS` : delay in milliseconds after required topics are ready (default: 2000)
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY` : delay in milliseconds betweeb publishs
   - `ROCON_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL` : log level (default, `info`)
