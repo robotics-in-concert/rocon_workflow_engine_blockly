@@ -24,10 +24,10 @@ module.exports = function(){
 
 
 function start(){
-  mongoose.connect(process.env.ROCON_AUTHORING_MONGO_URL);
+  mongoose.connect(process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL);
 
 
-  MongoClient.connect(process.env.ROCON_AUTHORING_MONGO_URL, function(e, db){
+  MongoClient.connect(process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL, function(e, db){
     if(e) throw e;
 
 
@@ -58,7 +58,7 @@ function start(){
 
     require('./routes')(app, db);
 
-    server = server.listen(process.env.ROCON_AUTHORING_SERVER_PORT, function(){
+    server = server.listen(process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT, function(){
       logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
     });
 
@@ -69,8 +69,8 @@ function start(){
 
 
     var engine_opts = _.defaults(argv.engine_options || {}, {
-      publish_delay: +process.env.ROCON_AUTHORING_PUBLISH_DELAY,
-      service_port: +process.env.ROCON_AUTHORING_SERVER_PORT
+      publish_delay: +process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY,
+      service_port: +process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT
     });
     global.engineManager = new EngineManager(io, {engine_options: engine_opts});
 
@@ -106,7 +106,7 @@ function setupLogger(){
   winston.loggers.add('main', {
     console: {
       colorize: true,
-      level: process.env.ROCON_AUTHORING_LOG_LEVEL,
+      level: process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL,
       prettyPrint: true
     }
 
@@ -122,10 +122,10 @@ function setupLogger(){
 
 function checkEnvVars(){
 
-  ['ROCON_AUTHORING_SERVER_PORT',
-    'ROCON_AUTHORING_ROSBRIDGE_URL',
-    'ROCON_AUTHORING_MONGO_URL',
-    'ROCON_AUTHORING_PUBLISH_DELAY',
+  ['ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT',
+    'ROCON_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL',
+    'ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL',
+    'ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY',
     'MSG_DATABASE'].forEach(function(e){
       var v = process.env[e]
       if(v){
