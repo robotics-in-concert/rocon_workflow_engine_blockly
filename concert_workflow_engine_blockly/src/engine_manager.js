@@ -53,6 +53,26 @@ var EngineManager = function(io, options){
     logger.info('socket.io client connected id:%s', socket.id);
     that._bindClientSocketHandlers(socket);
   });
+  this.io.of('/blockly').on('connection', function(socket){
+    logger.info('socket.io(blockly) connected id:%s', socket.id);
+    var mgr = that;
+
+    socket.on('*', function(e){
+      var cmd = e.data[0];
+
+      switch(cmd){
+        case 'start':
+          var pid = mgr.startEngine();
+          var payload = e.data[1];
+          if(payload && payload.items && payload.items.length){
+            mgr.run(pid, payload.items);
+          }
+          break;
+      }
+
+    });
+
+  });
 
 };
 util.inherits(EngineManager, EventEmitter2);

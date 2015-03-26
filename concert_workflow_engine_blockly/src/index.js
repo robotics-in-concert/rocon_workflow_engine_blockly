@@ -36,6 +36,7 @@ function start(){
     var io = socketio(server);
     io.use(socketio_wildcard());
     io.of('/engine/client').use(socketio_wildcard());
+    io.of('/blockly').use(socketio_wildcard());
 
     $io = io;
 
@@ -125,8 +126,7 @@ function checkEnvVars(){
   ['ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT',
     'ROCON_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL',
     'ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL',
-    'ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY',
-    'MSG_DATABASE'].forEach(function(e){
+    'ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY'].forEach(function(e){
       var v = process.env[e]
       if(v){
         logger.info(e, process.env[e].green);
