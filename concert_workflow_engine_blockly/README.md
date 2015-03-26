@@ -1,4 +1,4 @@
-rocon workflow engine (blockly)
+concert workflow engine (blockly)
 ===============================
 
 ## Pre-requisites
@@ -95,12 +95,12 @@ export ROCON_COMPOSER_BLOCKLY_LOG_LEVEL=info
 
 ### Required Environment Variables
 
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT` : The port to run web interface.
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL` : Rosbridge websocket URL (eg. ws://127.0.0.1:9090)
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL` : mongodb connection URL (eg. mongodb://localhost:27017/rocon_authoring)
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS` : delay in milliseconds after required topics are ready (default: 2000)
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY` : delay in milliseconds betweeb publishs
-  - `ROCON_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL` : log level (default, `info`)
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT` : The port to run web interface.
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL` : Rosbridge websocket URL (eg. ws://127.0.0.1:9090)
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_COMPOSER_URL` : rocon composer http url (eg. http://127.0.0.1:9999)
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS` : delay in milliseconds after required topics are ready (default: 2000)
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY` : delay in milliseconds betweeb publishs
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL` : log level (default, `info`)
 
 
 ### Rosbridge
