@@ -1,6 +1,5 @@
 var _ = require('lodash'),
   argv = require('minimist')(process.argv.slice(2)),
-  MongoClient = require('mongodb').MongoClient,
   colors = require('colors'),
   bodyParser = require('body-parser'),
   swig = require('swig'),
@@ -8,10 +7,8 @@ var _ = require('lodash'),
   express = require('express'),
   socketio = require('socket.io'),
   socketio_wildcard = require('socketio-wildcard'),
-  MongoClient = require('mongodb').MongoClient,
   winston = require('winston'),
   EngineManager = require('./engine_manager'),
-  mongoose = require('mongoose'),
   Engine = require('./engine');
 
 
@@ -24,83 +21,76 @@ module.exports = function(){
 
 
 function start(){
-  mongoose.connect(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL);
 
+  var app = express(); 
+  var server = http.createServer(app);
+  var io = socketio(server);
+  io.use(socketio_wildcard());
+  io.of('/engine/client').use(socketio_wildcard());
+  io.of('/blockly').use(socketio_wildcard());
 
-  MongoClient.connect(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_MONGO_URL, function(e, db){
-    if(e) throw e;
+  $io = io;
 
-
-    var app = express(); 
-    var server = http.createServer(app);
-    var io = socketio(server);
-    io.use(socketio_wildcard());
-    io.of('/engine/client').use(socketio_wildcard());
-    io.of('/blockly').use(socketio_wildcard());
-
-    $io = io;
-
-    io.on('connection', function(sock){
-    });
-
-
-    app.use(express.static('public'));
-    app.use(bodyParser.json({limit: '50mb'}));
-
-    // This is where all the magic happens!
-    app.engine('html', swig.renderFile);
-
-    app.set('view engine', 'html');
-    app.set('views', __dirname + '/../views');
-
-    app.set('view cache', false);
-    swig.setDefaults({ cache: false });
-
-
-    require('./routes')(app, db);
-
-    server = server.listen(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT, function(){
-      logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
-    });
-
-
-
-
-
-
-
-    var engine_opts = _.defaults(argv.engine_options || {}, {
-      publish_delay: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY,
-      service_port: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT
-    });
-    global.engineManager = new EngineManager(io, {engine_options: engine_opts});
-
-    if(argv.workflow){
-      argv.engine = true;
-    }
-
-
-    if(argv.engine){
-      
-
-
-      var workflows = argv.workflow;
-      if(!_.isEmpty(workflows)){
-        var pid = engineManager.startEngine();
-        engineManager.run(pid, workflows);
-      }
-
-
-
-
-    }
-
-
-
-
-
-
+  io.on('connection', function(sock){
   });
+
+
+  app.use(express.static('public'));
+  app.use(bodyParser.json({limit: '50mb'}));
+
+  // This is where all the magic happens!
+  app.engine('html', swig.renderFile);
+
+  app.set('view engine', 'html');
+  app.set('views', __dirname + '/../views');
+
+  app.set('view cache', false);
+  swig.setDefaults({ cache: false });
+
+
+  require('./routes')(app);
+
+  server = server.listen(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT, function(){
+    logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
+  });
+
+
+
+
+
+
+
+  var engine_opts = _.defaults(argv.engine_options || {}, {
+    publish_delay: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY,
+    service_port: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT
+  });
+  global.engineManager = new EngineManager(io, {engine_options: engine_opts});
+
+  if(argv.workflow){
+    argv.engine = true;
+  }
+
+
+  if(argv.engine){
+    
+
+
+    var workflows = argv.workflow;
+    if(!_.isEmpty(workflows)){
+      var pid = engineManager.startEngine();
+      engineManager.run(pid, workflows);
+    }
+
+
+
+
+  }
+
+
+
+
+
+
 };
 
 function setupLogger(){

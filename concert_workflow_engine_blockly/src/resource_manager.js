@@ -141,7 +141,6 @@ ResourceManager.prototype.to_json = function(){
       }
     })
     .value();
-  console.log("RESRES", payload);
 
   return payload;
 };

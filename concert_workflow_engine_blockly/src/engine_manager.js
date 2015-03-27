@@ -4,7 +4,6 @@ var spawn = require('child_process').spawn,
   Engine = require('./engine'),
   ResourceManager = require('./resource_manager'),
   util = require('util'),
-  Settings = require('./model').Settings,
   Requester = require('./requester').Requester,
   Resource = require('./requester').Resource,
   EventEmitter2 = require('eventemitter2').EventEmitter2;
@@ -205,24 +204,24 @@ EngineManager.prototype.run = function(pid, workflows){
 
   this.callOnReady(pid, function(){
 
-    if(_.isString(workflows[0])){
-      var items = Settings.getItems(function(e, items){
-        var items_to_load = _(items)
-          .filter(function(i) { return _.contains(workflows, i.title); })
-          .sortBy(function(i) { return _.indexOf(workflows, i.title); })
-          .value();
-        var child = that.engine_processes[pid];
-        var proc = child.process;
-        proc.send({action: 'run', items: items_to_load});
-        child.running_items = items_to_load;
+    // if(_.isString(workflows[0])){
+      // var items = Settings.getItems(function(e, items){
+        // var items_to_load = _(items)
+          // .filter(function(i) { return _.contains(workflows, i.title); })
+          // .sortBy(function(i) { return _.indexOf(workflows, i.title); })
+          // .value();
+        // var child = that.engine_processes[pid];
+        // var proc = child.process;
+        // proc.send({action: 'run', items: items_to_load});
+        // child.running_items = items_to_load;
 
 
-      });
-    }else if(_.isObject(workflows[1])){
-      var items_to_load = _.map(workflows, 'data');
-      proc.send({action: 'run', items: items_to_load});
-      child.running_items = items_to_load;
-    }
+      // });
+    // }else if(_.isObject(workflows[1])){
+      // var items_to_load = _.map(workflows, 'data');
+      // proc.send({action: 'run', items: items_to_load});
+      // child.running_items = items_to_load;
+    // }
 
 
 
