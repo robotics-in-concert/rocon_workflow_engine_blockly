@@ -79,12 +79,13 @@ util.inherits(EngineManager, EventEmitter2);
 
 
 EngineManager.prototype.enableWorkflows = function(options){
+  var mgr = this;
   var payload = options;
   if(payload.enable){
 
     var pid = this.startEngine({name: payload.service_name});
-    var workflows = _.sortBy(payload.workflows, 'order');
-    workflows = _.map(workflows, JSON.parse);
+    var workflows = _(payload.workflows).sortBy('order').value();
+
     mgr.run(pid, workflows);
     
   }else{
@@ -204,6 +205,8 @@ EngineManager.prototype.run = function(pid, workflows){
   var that = this;
 
   this.callOnReady(pid, function(){
+    var child = that.engine_processes[pid];
+    var proc = child.process;
     var items_to_load = _.map(workflows, 'data');
     proc.send({action: 'run', items: items_to_load});
     child.running_items = items_to_load;
