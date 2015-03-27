@@ -32,7 +32,7 @@ var EngineManager = function(io, options){
     });
 
 
-    ros.subscribe('/enable_workflows', 'RoconAuthoring/EnableWorkflows', _.bind(that.enableWorkflows, that));
+    ros.subscribe('/enable_workflows', 'concert_workflow_engine_msgs/EnableWorkflows', _.bind(that.enableWorkflows, that));
 
   });
 
@@ -82,8 +82,9 @@ EngineManager.prototype.enableWorkflows = function(options){
   var payload = options;
   if(payload.enable){
 
-    var pid = this.startEngine({name: payload.name});
+    var pid = this.startEngine({name: payload.service_name});
     var workflows = _.sortBy(payload.workflows, 'order');
+    workflows = _.map(workflows, JSON.parse);
     mgr.run(pid, workflows);
     
   }else{
@@ -203,6 +204,9 @@ EngineManager.prototype.run = function(pid, workflows){
   var that = this;
 
   this.callOnReady(pid, function(){
+    var items_to_load = _.map(workflows, 'data');
+    proc.send({action: 'run', items: items_to_load});
+    child.running_items = items_to_load;
 
     // if(_.isString(workflows[0])){
       // var items = Settings.getItems(function(e, items){
