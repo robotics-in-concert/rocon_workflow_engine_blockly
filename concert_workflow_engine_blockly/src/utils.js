@@ -39,7 +39,7 @@ module.exports = {
     var defaults = {
       console: {
         colorize: true,
-        level: process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL,
+        level: process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL,
         prettyPrint: true
       }
 

@@ -155,7 +155,7 @@ Engine.prototype.waitForTopicsReady = function(required_topics){
 
 Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var engine = this;
-  var delay = process.env.ROCON_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS || 2000;
+  var delay = process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS || 2000;
 
 
 
