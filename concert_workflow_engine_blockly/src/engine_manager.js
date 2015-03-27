@@ -274,7 +274,10 @@ EngineManager.prototype._bindEvents = function(child){
         that.emit(['child', child.pid, status].join('.'));
 
         var event = {service_name: proc.name, status: status};
-        that.ros.publish('/get_workflows_status', 'rocon_authoring/WorkflowsStatus', event);
+        if(proc.name){
+          var tp = "concert_workflow_engine_msgs/WorkflowsStatus";
+          that.ros.publish('/get_workflows_status', tp, event);
+          }
 
 
         result = that.broadcastEnginesInfo();
