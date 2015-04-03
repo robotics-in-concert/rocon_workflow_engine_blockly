@@ -90,7 +90,7 @@ EngineManager.prototype.enableWorkflows = function(options){
     
   }else{
     var x = _.find(this.engine_processes, {name: payload.service_name})
-    this.killEngine(x.child.pid)
+    this.killEngine(x.process.pid)
   }
 
 
