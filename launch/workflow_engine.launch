@@ -1,8 +1,4 @@
 <launch>
-  <arg name="auto_run_workflows" default="[welcome_wf, common_func_wf]"/>
-  <node pkg="concert_workflow_engine" type="dummy_service_manager.py" name="dummy_service_manager">
-    <rosparam param="auto_run_workflows" subst_value="True">$(arg auto_run_workflows)</rosparam>
-  </node>
   <node pkg="concert_workflow_engine" type="concert_workflow_engine_blockly.js" name="workflow_engine" cwd="node">
   </node>
 </launch>
