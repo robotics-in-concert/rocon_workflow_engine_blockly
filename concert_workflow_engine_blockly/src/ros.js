@@ -8,11 +8,12 @@ var _ = require('lodash'),
   util = require('util');
 
 var Ros = function(opts){
+
   EventEmitter2.call(this, {wildcard: true});
   var that = this;
   this.options = _.assign({
     ros_retries: 0,
-    ros_retry_interval: 1000,
+    ros_retry_interval: 3000,
   }, opts);
 
   var retry_op = Utils.retry(function(){

@@ -54,16 +54,10 @@ var Engine = function(opts){
 };
 util.inherits(Engine, EventEmitter2);
 
-Engine.prototype.socketBroadcast = function(key, msg){
-  this.socket.emit(key, msg);
-  this.debug('socket#emit', key, msg);
+Engine.prototype.socketBroadcast = function(namespace, key, msg){
+  process_send2({action: 'socket_broadcast', namespace:namespace, key: key, msg: msg})
+  this.debug('socket broadcast', namespace, key, msg);
 };
-
-Engine.prototype.socketBroadcast = function(key, msg){
-  this.socket.emit(key, msg);
-  this.log('socket#emit', key, msg);
-};
-
 
 Engine.prototype.getMessageDetails = function(type, cb){
   var engine = this;
@@ -358,6 +352,8 @@ Engine.prototype.debug = function(args){
 
 Engine.prototype.itemsToCode = function(items){
   var js = _.map(items, function(i){
+    console.log(i);
+
     i = _.isString(i) ? JSON.parse(i) : i;
     return "// "+i.title+"\n"+i.js;
   }).join("\n\n");

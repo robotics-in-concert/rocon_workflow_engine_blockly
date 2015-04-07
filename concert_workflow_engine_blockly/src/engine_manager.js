@@ -48,6 +48,14 @@ var EngineManager = function(io, options){
     io.emit('data', {event: this.event, payload: payload});
   });
 
+
+  this.io.of('/prezi').on('connection', function(socket){
+    logger.info('socket.io(prezi) connected id:%s', socket.id);
+    
+  });
+
+
+
   this.io.of('/engine/client').on('connection', function(socket){
     logger.info('socket.io client connected id:%s', socket.id);
     that._bindClientSocketHandlers(socket);
@@ -299,6 +307,11 @@ EngineManager.prototype._bindEvents = function(child){
     
       case 'release_resource':
         result = that.resource_manager.release(msg.requester_id);
+        break;
+
+      case 'socket_broadcast':
+        that.io.of(msg.namespace).emit(msg.key, msg.msg);
+        result = true
         break;
 
       default:
