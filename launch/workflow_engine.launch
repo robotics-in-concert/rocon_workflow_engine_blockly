@@ -1,4 +1,10 @@
 <launch>
-  <node pkg="concert_workflow_engine" type="concert_workflow_engine_blockly.js" name="workflow_engine" cwd="node">
+  <arg name="port"/>
+  <arg name="address"/>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    <arg name="port" value="$(arg port)"/>
+    <arg name="address" value="$(arg address)"/>
+  </include>
+  <node pkg="concert_workflow_engine" type="concert_workflow_engine_blockly.js" name="workflow_engine_blockly" cwd="node">
   </node>
 </launch>
