@@ -28,6 +28,7 @@ function start(){
   io.use(socketio_wildcard());
   io.of('/engine/client').use(socketio_wildcard());
   io.of('/blockly').use(socketio_wildcard());
+  io.of('/prezi').use(socketio_wildcard());
 
   $io = io;
 

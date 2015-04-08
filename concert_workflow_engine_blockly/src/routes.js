@@ -7,6 +7,9 @@ module.exports = function(app){
   app.get('/', function(req, res){
     res.render('engine');
   });
+  app.get('/prezi', function(req, res){
+    res.render('prezi');
+  });
 
   app.get('/ping', function(req, res){
     res.send('pong')
