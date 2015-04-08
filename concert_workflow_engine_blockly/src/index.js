@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-  argv = require('minimist')(process.argv.slice(2)),
+  args = require('minimist')(process.argv.slice(2)),
   colors = require('colors'),
   bodyParser = require('body-parser'),
   swig = require('swig'),
@@ -10,6 +10,19 @@ var _ = require('lodash'),
   winston = require('winston'),
   EngineManager = require('./engine_manager'),
   Engine = require('./engine');
+
+
+options = _.defaults(args, {
+  port: 9999,
+  rosbridge_port: 9091,
+  rosbridge_address: 'localhost',
+  log_level: 'info',
+  publish_delay: 100,
+  action_delay: 2000
+})
+
+
+
 
 
 module.exports = function(){
@@ -51,41 +64,24 @@ function start(){
 
   require('./routes')(app);
 
-  server = server.listen(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT, function(){
+  server = server.listen(options.port, function(){
     logger.info('Listening on port %d (%s)', server.address().port, process.env.NODE_ENV);
   });
 
+  global.engineManager = new EngineManager(io, options);
 
-
-
-
-
-
-  var engine_opts = _.defaults(argv.engine_options || {}, {
-    publish_delay: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY,
-    service_port: +process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT
-  });
-  global.engineManager = new EngineManager(io, {engine_options: engine_opts});
-
-  if(argv.workflow){
-    argv.engine = true;
-  }
-
-
-  if(argv.engine){
     
 
 
-    var workflows = argv.workflow;
-    if(!_.isEmpty(workflows)){
-      var pid = engineManager.startEngine();
-      engineManager.run(pid, workflows);
-    }
+  // var workflows = argv.workflow;
+  // if(!_.isEmpty(workflows)){
+    // var pid = engineManager.startEngine();
+    // engineManager.run(pid, workflows);
+  // }
 
 
 
 
-  }
 
 
 
@@ -98,7 +94,7 @@ function setupLogger(){
   winston.loggers.add('main', {
     console: {
       colorize: true,
-      level: process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL,
+      level: options.log_level,
       prettyPrint: true
     }
 
@@ -113,17 +109,6 @@ function setupLogger(){
 };
 
 function checkEnvVars(){
-
-  ['CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT',
-    'CONCERT_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL',
-    'CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY'].forEach(function(e){
-      var v = process.env[e]
-      if(v){
-        logger.info(e, process.env[e].green);
-      }else{
-        logger.info(e, 'null'.red);
-      }
-    });
-
+  logger.info(args);
 };
 

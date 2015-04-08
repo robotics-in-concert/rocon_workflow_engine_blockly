@@ -1,6 +1,7 @@
 var _ = require('lodash'),
   R = require('ramda'),
   Promise = require('bluebird'),
+  args = require('minimist')(process.argv.slice(2))
   EventEmitter2 = require('eventemitter2').EventEmitter2,
   ROSLIB = require('roslib'),
   Fiber = require('fibers')
@@ -15,10 +16,6 @@ var _ = require('lodash'),
   UUID = require('node-uuid'),
   Ros = require('./ros'),
   URL = require('url');
-
-
-
-DEBUG = process.env.DEBUG || false
 
 
 
@@ -57,14 +54,6 @@ util.inherits(Engine, EventEmitter2);
 Engine.prototype.socketBroadcast = function(namespace, key, msg){
   process_send2({action: 'socket_broadcast', namespace:namespace, key: key, msg: msg})
   this.debug('socket broadcast', namespace, key, msg);
-};
-
-Engine.prototype.getMessageDetails = function(type, cb){
-  var engine = this;
-  var url = URL.resolve(process.env.MSG_DATABASE, "/api/message_details");
-  request(url, {qs: {type: type}, json: true}, function(e, res, body){
-    cb(null, body);
-  });
 };
 
 
@@ -149,7 +138,7 @@ Engine.prototype.waitForTopicsReady = function(required_topics){
 
 Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var engine = this;
-  var delay = process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS || 2000;
+  var delay = this.options.action_delay;
 
 
 

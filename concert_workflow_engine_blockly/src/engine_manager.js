@@ -156,7 +156,7 @@ EngineManager.prototype._bindClientSocketHandlers = function(socket){
 
 
 EngineManager.prototype.startEngine = function(extras){
-  var engine_opts = this.options.engine_options;
+  var engine_opts = this.options;
   extras = _.defaults(extras || {}, {});
 
   logger.info('engine options', engine_opts);
