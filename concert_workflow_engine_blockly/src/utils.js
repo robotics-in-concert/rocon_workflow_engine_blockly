@@ -45,7 +45,7 @@ module.exports = {
 
     };
 
-    winston.loggers.add('main', _.defaults(options, defaults));
+    winston.loggers.add('main', defaults);
     var logger = winston.loggers.get('main')
     return logger;
     // logger.cli()
