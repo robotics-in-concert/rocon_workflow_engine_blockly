@@ -13,7 +13,7 @@
       <tr ng-repeat="proc in processes">
         <td>
           <span ng-class="{'label-default': true, 'label-success': proc.status=='running', label: true}">[[proc.status]]</span>
-          <strong>Engine#[[proc.pid]]</strong>
+          <strong>[[proc.name]]</strong>
         </td>
 
         <td>
