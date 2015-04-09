@@ -314,7 +314,7 @@ Engine.prototype.clear = function(){
   this.executions = [];
 
   var proms = _.map(this.my_dynamic_resource_ids, function(rid){
-    return process_send2({cmd: 'release_resource', requester_id: req_id});
+    return process_send2({cmd: 'release_resource', requester_id: rid});
 
   });
   return Promise.all(proms).then(function(){
