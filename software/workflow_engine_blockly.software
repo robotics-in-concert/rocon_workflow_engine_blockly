@@ -1,0 +1,10 @@
+name: Workflow Engine Blockly 
+description: Execution workflows composed by blockly
+author: DongWook Lee
+launch: concert_workflow_engine/workflow_engine.launch
+max_count: -1
+parameters:
+  - name: address
+    value: localhost
+  - name: port
+    value: 9091
