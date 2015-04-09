@@ -13,6 +13,7 @@
   <run_depend>rocon_std_msgs</run_depend>
   <run_depend>concert_workflow_engine_msgs</run_depend>
   <run_depend>rospy</run_depend>
+  <run_depend>concert_workflow_engine_blockly</run_depend>
   <run_depend>concert_software_farmer</run_depend>
   <run_depend>concert_service_utilities</run_depend>
 </package>
