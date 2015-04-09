@@ -216,6 +216,9 @@ EngineManager.prototype.run = function(pid, workflows){
     var child = that.engine_processes[pid];
     var proc = child.process;
     var items_to_load = _.map(workflows, 'data');
+    if(_.isString(items_to_load)){
+      items_to_load = JSON.parse(items_to_load);
+    }
     proc.send({action: 'run', items: items_to_load});
     child.running_items = items_to_load;
 
