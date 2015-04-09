@@ -11,13 +11,14 @@ var Ros = function(opts){
 
   EventEmitter2.call(this, {wildcard: true});
   var that = this;
-  this.options = _.assign({
+  var options = this.options = _.assign({
     ros_retries: 0,
     ros_retry_interval: 3000,
   }, opts);
 
+  var ros_url = 'ws://' + options.rosbridge_address + ':' + options.rosbridge_port;
   var retry_op = Utils.retry(function(){
-    logger.info('trying to connect to ros ' + process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL);
+    logger.info('trying to connect to ros ' + ros_url);
     var connected = false;
 
     var ros = that.underlying = new ROSLIB.Ros({encoding: 'utf8'});
@@ -41,7 +42,7 @@ var Ros = function(opts){
       logger.info('ros closed');
       // retry_op.retry();
     });
-    ros.connect(process.env.CONCERT_WORKFLOW_ENGINE_BLOCKLY_ROSBRIDGE_URL);
+    ros.connect(ros_url);
 
   }, function(e){
     logger.error('ros connection failed', e);
@@ -65,7 +66,7 @@ util.inherits(Ros, EventEmitter2);
 // public - promise version
 Ros.prototype.waitForTopicsReady = function(required_topics){
   var that = this;
-  var delay = process.env.rocon_authoring_delay_after_topics || 2000;
+  var delay = this.options.action_delay || 2000;
 
   return new Promise(function(resolve, reject){
     var timer = setInterval(function(){

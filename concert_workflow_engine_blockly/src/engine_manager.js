@@ -32,7 +32,7 @@ var EngineManager = function(io, options){
     });
 
 
-    ros.subscribe('/enable_workflows', 'concert_workflow_engine_msgs/EnableWorkflows', _.bind(that.enableWorkflows, that));
+    ros.subscribe('enable_workflows', 'concert_workflow_engine_msgs/EnableWorkflows', _.bind(that.enableWorkflows, that));
 
   });
 
@@ -156,7 +156,7 @@ EngineManager.prototype._bindClientSocketHandlers = function(socket){
 
 
 EngineManager.prototype.startEngine = function(extras){
-  var engine_opts = this.options.engine_options;
+  var engine_opts = this.options;
   extras = _.defaults(extras || {}, {});
 
   logger.info('engine options', engine_opts);
@@ -284,7 +284,7 @@ EngineManager.prototype._bindEvents = function(child){
         var event = {service_name: proc.name, status: status};
         if(proc.name){
           var tp = "concert_workflow_engine_msgs/WorkflowsStatus";
-          that.ros.publish('/get_workflows_status', tp, event);
+          that.ros.publish('get_workflows_status', tp, event);
           }
 
 

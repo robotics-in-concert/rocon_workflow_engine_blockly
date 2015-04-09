@@ -11,7 +11,7 @@ var _ = require('lodash'),
 process.name = 'rocon-workflow-engine'
 $pid = process.pid;
 
-global.logger = utils.setup_logger({});
+global.logger = utils.setup_logger({level: 'info'});
 logger.info('pid', $pid);
 
 
