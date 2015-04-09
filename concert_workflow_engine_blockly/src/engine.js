@@ -341,8 +341,6 @@ Engine.prototype.debug = function(args){
 
 Engine.prototype.itemsToCode = function(items){
   var js = _.map(items, function(i){
-    console.log(i);
-
     i = _.isString(i) ? JSON.parse(i) : i;
     return "// "+i.title+"\n"+i.js;
   }).join("\n\n");

@@ -219,8 +219,11 @@ EngineManager.prototype.run = function(pid, workflows){
     if(_.isString(items_to_load)){
       items_to_load = JSON.parse(items_to_load);
     }
+    console.log('ITEMS2LOAD', items_to_load);
+
     proc.send({action: 'run', items: items_to_load});
     child.running_items = items_to_load;
+
 
     // if(_.isString(workflows[0])){
       // var items = Settings.getItems(function(e, items){
