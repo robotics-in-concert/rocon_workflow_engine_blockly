@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>concert_workflow_handler_blockly</name>
+  <version>0.1.0</version>
+  <description>Service launcher type support for  worflows</description>
+  <maintainer email="dwlee@yujinrobot.com">Dongwook Lee</maintainer>
+  <license>BSD</license>
+  <url type="repository">https://github.com/robotics-in-concert/rocon_concert</url>
+  <url type="bugtracker">https://github.com/robotics-in-concert/rocon_concert/issues</url>
+  <author>Dongwook Lee</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>rocon_std_msgs</run_depend>
+  <run_depend>concert_workflow_engine_msgs</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>concert_software_farmer</run_depend>
+  <run_depend>concert_service_utilities</run_depend>
+</package>
