@@ -18,7 +18,11 @@ options = _.defaults(args, {
   rosbridge_address: 'localhost',
   log_level: 'info',
   publish_delay: 100,
-  action_delay: 2000
+  action_delay: 2000,
+  ros: {
+    retries: 0,
+    retry_interval: 3000
+  }
 })
 
 

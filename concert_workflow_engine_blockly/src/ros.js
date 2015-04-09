@@ -11,10 +11,7 @@ var Ros = function(opts){
 
   EventEmitter2.call(this, {wildcard: true});
   var that = this;
-  var options = this.options = _.assign({
-    ros_retries: 0,
-    ros_retry_interval: 3000,
-  }, opts);
+  var options = this.options = opts;
 
   var ros_url = 'ws://' + options.rosbridge_address + ':' + options.rosbridge_port;
   var retry_op = Utils.retry(function(){
@@ -48,7 +45,7 @@ var Ros = function(opts){
     logger.error('ros connection failed', e);
     that.emit('status.start_failed');
     
-  }, this.options.ros_retries, this.options.ros_retry_interval);
+  }, this.options.ros.retries, this.options.ros.retry_interval);
 
 
   this.subscribe_topics = [];
