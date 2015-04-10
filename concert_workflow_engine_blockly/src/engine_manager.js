@@ -299,7 +299,7 @@ EngineManager.prototype._bindEvents = function(child){
                            (status == 'started' ? 2 : 
                             (status == 'running' ? 3 : 
                              (status == 'stopped' ? 4 :
-                              status == 'error' ? -1 : 0)));
+                              status == 'error' ? -1 : 0))));
         var status_msg = (status == 'error' ? msg.message : '');
 
         var event = {service_name: proc.name, status: status_code, message: status_msg};
