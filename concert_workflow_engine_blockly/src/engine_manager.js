@@ -95,7 +95,7 @@ EngineManager.prototype.enableWorkflows = function(options){
       logger.error(payload.service_name + " is already running");
     }else{
       var pid = this.startEngine({name: payload.service_name});
-      var workflows = _(payload.workflows).sortBy('order').value();
+      var workflows = payload.workflows;
       mgr.run(pid, workflows);
 
     }
