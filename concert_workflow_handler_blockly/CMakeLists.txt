@@ -3,14 +3,16 @@
 ##############################################################################
 
 cmake_minimum_required(VERSION 2.8.3)
-project(concert_workflow_engine)
+project(concert_workflow_handler_blockly)
 
 ##############################################################################
 # Catkin
 ##############################################################################
+
 find_package(catkin REQUIRED)
-
-#catkin_npm_update() Under development
-
+catkin_python_setup()
 catkin_package()
-catkin_add_env_hooks(25.concert-workflow-engine-blockly SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+
+##############################################################################
+# Installs
+##############################################################################

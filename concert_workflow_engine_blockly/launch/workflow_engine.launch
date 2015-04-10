@@ -12,7 +12,7 @@
   <arg name="action_delay"/>
   <arg name="publish_delay"/>
   <arg name="log_level"/>
-  <node pkg="concert_workflow_engine" type="concert_workflow_engine_blockly.js" name="workflow_engine_blockly" cwd="node" 
+  <node pkg="concert_workflow_engine_blockly" type="concert_workflow_engine_blockly.js" name="workflow_engine_blockly" cwd="node" 
     args="--port $(arg server_port) --rosbridge_port $(arg port) --rosbridge_address $(arg address) --action_delay $(arg action_delay) --publish_delay $(arg publish_delay) --log_level $(arg log_level)">
   </node>
 </launch>
