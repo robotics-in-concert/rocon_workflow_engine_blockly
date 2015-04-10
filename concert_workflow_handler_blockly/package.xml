@@ -9,7 +9,7 @@
   <license>BSD</license>
   <url type="repository">https://github.com/robotics-in-concert/concert_workflow_engine</url>
   <url type="bugtracker">https://github.com/robotics-in-concert/concert_workflow_engine/issues</url>
-  <url type="website">http://www.ros.org/wiki/concert_workflow_engine</url>
+  <url type="website">http://www.ros.org/wiki/concert_workflow_handler_blockly</url>
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>concert_workflow_engine_msgs</run_depend>
