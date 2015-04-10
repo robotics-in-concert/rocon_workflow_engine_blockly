@@ -110,7 +110,7 @@ Engine.prototype.runService = function(name, type, request){
 };
 
 Engine.prototype.runCode = function(code){
-  code = ["var f = Fiber(function(){ try{ ", code , " }catch(error_in_fiber){ console.log('error in fiber', error_in_fiber); }}); f.run(); f"].join("\n");
+  code = ["var f = Fiber(function(){ try{ ", code , " }catch(error_in_fiber){ console.log('error in fiber', error_in_fiber); throw error_in_fiber }}); f.run(); f"].join("\n");
   code = Utils.js_beautify(code);
   this.debug("---------------- scripts -----------------");
   this.debug(_.map(code.split(/\n/), function(line){ return line; }).join("\n"));
@@ -121,6 +121,7 @@ Engine.prototype.runCode = function(code){
     this.log("scripts evaluated.");
   }catch(e){
     this.log('invalid block scripts. failed. - ' + e.toString());
+    this.emit('status.error', e.message);
   }
 
 

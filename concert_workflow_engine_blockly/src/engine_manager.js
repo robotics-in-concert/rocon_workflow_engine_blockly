@@ -294,7 +294,15 @@ EngineManager.prototype._bindEvents = function(child){
         proc.status = status;
         that.emit(['child', child.pid, status].join('.'));
 
-        var event = {service_name: proc.name, status: status};
+
+        var status_code = (status == 'started' ? 1 : 
+                           (status == 'running' ? 2 : 
+                            (status == 'stopped' ? 3 :
+                             status == 'error' ? -1 : 0)));
+        var msg = '';
+        if(status == 'error'){ msg = msg.message; }
+
+        var event = {service_name: proc.name, status: status_code, message: msg};
         if(proc.name){
           var tp = "concert_workflow_engine_msgs/WorkflowsStatus";
           that.ros.publish('get_workflows_status', tp, event);

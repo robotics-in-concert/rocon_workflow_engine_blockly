@@ -17,15 +17,16 @@ logger.info('pid', $pid);
 
 
 
-var _postStatus = function(status){ process.send({action: 'status', status: status}); };
+var _postStatus = function(status, msg){ process.send({action: 'status', status: status, message: msg}); };
 
 var engine_options = JSON.parse(argv.option);
 
 $engine = new Engine(engine_options);
 
-$engine.on('status.*', function(){
+$engine.on('status.*', function(msg){
   var en = this.event.split(/\./)[1];
-  _postStatus(en);
+  msg = msg || '';
+  _postStatus(en, msg);
 
 });
 
@@ -47,8 +48,8 @@ process.on('message', function(data){
   switch(cmd){
     case 'run':
       var items = data.items;
-      $engine.runItems(items);
       _postStatus('running');
+      $engine.runItems(items);
       break;
     case 'stop':
       $engine.clear().then(function(){
