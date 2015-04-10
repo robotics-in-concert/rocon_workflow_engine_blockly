@@ -91,10 +91,18 @@ EngineManager.prototype.enableWorkflows = function(options){
   var payload = options;
   if(payload.enable){
 
-    var pid = this.startEngine({name: payload.service_name});
-    var workflows = _(payload.workflows).sortBy('order').value();
+    if(_.find(this.engine_processes, {name: payload.service_name})){
+      logger.error(payload.service_name + " is already running");
+    }else{
+      var pid = this.startEngine({name: payload.service_name});
+      var workflows = _(payload.workflows).sortBy('order').value();
+      mgr.run(pid, workflows);
 
-    mgr.run(pid, workflows);
+    }
+
+
+
+
     
   }else{
     var x = _.find(this.engine_processes, {name: payload.service_name})
