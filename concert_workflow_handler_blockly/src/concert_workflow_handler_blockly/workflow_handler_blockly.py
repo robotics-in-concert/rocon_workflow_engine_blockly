@@ -55,7 +55,6 @@ class WorkflowHandlerBlockly(object):
             for wf in loaded_workflows['workflows']:
                 try:
                     workflow = Workflow()
-                    workflow.order = wf['order']
                     wf_file_name = rocon_python_utils.ros.find_resource_from_string(wf['workflow'])
                     with open(wf_file_name) as wff:
                         workflow.data = wff.readline()
