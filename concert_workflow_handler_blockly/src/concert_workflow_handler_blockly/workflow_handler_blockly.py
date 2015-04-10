@@ -1,7 +1,7 @@
 #
 # License: BSD
 #
-#   https://raw.github.com/robotics-in-concert/rocon_concert/license/LICENSE
+#   https://raw.github.com/robotics-in-concert/concert_workflow_engine/license/LICENSE
 #
 # Used for running services that are defined by a multi-master style
 # roslaunch - aka a link graph. In these services, the entities are all
