@@ -27,7 +27,7 @@ if __name__ == '__main__':
             raise FailedToStartSoftwareException("Failed to allocate software")
         wf_handler = concert_workflow_handler_blockly.WorkflowHandlerBlockly(service_name, wf, namespace)
         rospy.on_shutdown(wf_handler.shutdown)
-        rospy.on_shutdown(lambda : sfc.deallocate("concert_workflow_engine_blockly/workflow_engine_blockly"))
+        # rospy.on_shutdown(lambda : sfc.deallocate("concert_workflow_engine_blockly/workflow_engine_blockly"))
         wf_handler.spin()
 
     except (FailedToStartSoftwareException, rospkg.ResourceNotFound) as e:
