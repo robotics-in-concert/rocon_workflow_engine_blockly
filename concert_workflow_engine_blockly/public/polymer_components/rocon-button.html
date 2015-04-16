@@ -4,29 +4,11 @@
 <!-- <link rel="import" href="../components/paper-button/paper-button.html"> -->
 <polymer-element name="rocon-button" role="button" attributes="rocon_id text">
   <template>
+  <link rel="stylesheet" href="../css/rocon-component.css">
   <style>
-    :host {
-      margin: 4px;
-      padding: 10px;
-      border: solid 1px #aaa;
-      cursor: pointer;
-      display: flex;
-      flex: 1;
-      align-items: center;
-
-    }
-    #wrapper { 
-      display: block;
-      flex: 1;
-      text-align: center;
-    }
-
-
-
-
   </style>
   <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
-    <div id="wrapper" on-tap="{{handleTap}}">
+    <div id="rocon-component-wrapper" on-tap="{{handleTap}}">
       <div align-center>{{text}}</div>
     </div>
   <!-- <div class="tile" center on-tap="{{handleTap}}"> -->

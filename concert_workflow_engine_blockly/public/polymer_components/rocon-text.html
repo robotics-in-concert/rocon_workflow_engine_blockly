@@ -1,30 +1,14 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <polymer-element name="rocon-text" attributes="text" >
   <template>
+  <link rel="stylesheet" href="../css/rocon-component.css">
   <style>
     :host {
-      margin: 4px;
-      padding: 10px;
-      border: solid 1px #aaa;
       background-color: #eee;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      flex: 1;
-
     }
-    #wrapper { 
-      display: block;
-      flex: 1;
-      text-align: center;
-    }
-
-
-
-
   </style>
   <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
-    <div id="wrapper">
+    <div id="rocon-component-wrapper">
       <div align-center>{{text}}</div>
     </div>
   </template>
