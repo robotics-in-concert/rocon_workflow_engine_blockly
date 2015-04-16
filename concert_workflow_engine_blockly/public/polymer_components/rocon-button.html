@@ -39,7 +39,7 @@
   <script>
     Polymer('rocon-button', {
       handleTap: function(){
-        this.fire('core-signal', {name: 'rocon-button', data: {'event': 'tap', id: this.rocon_id}});
+        this.fire('core-signal', {name: 'rocon-component', data: {'event': 'tap', id: this.rocon_id}});
         console.log('core signal fired');
 
 
