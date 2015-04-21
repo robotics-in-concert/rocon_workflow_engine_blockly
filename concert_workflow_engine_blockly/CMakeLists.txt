@@ -8,7 +8,7 @@ project(concert_workflow_engine_blockly)
 ##############################################################################
 # Catkin
 ##############################################################################
-find_package(catkin REQUIRED cmake_node_hook)
+find_package(catkin REQUIRED cmake_nodejs_hook)
 
 # This calls npm update only once.
 catkin_npm_update_once()
