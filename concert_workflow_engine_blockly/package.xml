@@ -16,6 +16,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>nodejs</build_depend>
+  <build_depend>cmake_nodejs_hook</build_depend>
   <run_depend>nodejs</run_depend>
   <run_depend>rosbridge_server</run_depend>
 
