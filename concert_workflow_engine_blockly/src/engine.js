@@ -267,7 +267,7 @@ Engine.prototype.decResourceRefCount = function(rid){
 };
 
 
-Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, onFeedback){
+Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, onFeedback, onTimeout, options){
   var name = _.detect(ctx.remappings, {remap_from: name}).remap_to;
   var engine = this;
 
@@ -281,7 +281,10 @@ Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, 
       onResult(items); 
       engine.releaseResource(ctx);
     }, 
-    function(items){ onFeedback(items) });
+    function(items){ onFeedback(items) },
+    onTimeout,
+    options
+  );
 
   
 

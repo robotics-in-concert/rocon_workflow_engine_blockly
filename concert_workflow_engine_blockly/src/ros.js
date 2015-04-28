@@ -156,7 +156,10 @@ Ros.prototype.unsubscribeAll = function(){
   this.subscribe_topics = [];
 };
 
-Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback){
+Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options){
+  var options = _.defaults(options || {}, {
+  });
+
   logger.info("run action : " +  name + " " + type + " " + JSON.stringify(goal));
 
   var ac = new ROSLIB.ActionClient({
@@ -170,10 +173,21 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback){
     goalMessage : goal
   });
 
-  goal.on('feedback', onFeedback);
-  goal.on('result', onResult);
+
+  var timedout = false;
+  var _onResult = function(x){ if(!timedout){ onResult(x); } };
+  var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
+
+  goal.on('feedback', _onFeedback);
+  goal.on('result', _onResult);
 
   goal.send();
+  if(options.timeout > 0){
+    setTimeout(function(){
+      timedout = true;
+      opTimeout();
+    }, options.timeout);
+  }
 
 };
 
