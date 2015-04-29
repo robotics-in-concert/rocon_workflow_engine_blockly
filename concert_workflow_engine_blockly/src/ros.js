@@ -174,18 +174,19 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   });
 
 
+  var timeout_h = null;
   var timedout = false;
-  var _onResult = function(x){ if(!timedout){ onResult(x); } };
+  var _onResult = function(x){ if(!timedout){ clearTimeout(tiemout_h); onResult(x);  } };
   var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
 
   goal.on('feedback', _onFeedback);
   goal.on('result', _onResult);
 
   goal.send();
-  if(options.timeout > 0){
-    setTimeout(function(){
+  if(options.timeout >= 0){
+    timeout_h = setTimeout(function(){
       timedout = true;
-      opTimeout();
+      onTimeout();
     }, options.timeout);
   }
 
