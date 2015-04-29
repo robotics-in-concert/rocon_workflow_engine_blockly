@@ -142,6 +142,14 @@ Ros.prototype.publish = function(topic, type, msg){
 
 };
 
+
+Ros.prototype.getParam = function(key, callback){
+  return new Promise(function(resolve, reject){
+    var param = new ROSLIB.Param({ros: this.underlying, name: key});
+    param.get(resolve);
+  });
+};
+
 Ros.prototype.unsubscribe = function(topic){
   var t = _.remove(this.subscribe_topics, {name: topic});
   t = t[0];

@@ -85,6 +85,19 @@ Engine.prototype.sleep = function(ms){
   _sleep(ms).wait();
 
 };
+
+
+Engine.prototype.getServiceParameter = function(service_name, key){
+  var future = new Future();
+
+  this.ros.getParam(['/services', service_name, key].join('/'))
+    .then(function(result){
+      future.result(result);
+    });
+  return future.wait();
+
+};
+
 Engine.prototype.runService = function(name, type, request){
   var e = this;
 
