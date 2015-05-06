@@ -205,7 +205,7 @@ Engine.prototype.allocateResource = function(rapp, uri, remappings, parameters, 
   process_send2({action: 'allocate_resource', key: key, rapp: rapp, uri: uri, remappings: remappings, parameters: parameters, options: options})
     .then(function(ctx){
 
-      if(allocation_type == 'dynamic')
+      if(ctx && allocation_type == 'dynamic')
         engine.my_dynamic_resource_ids.push(ctx.req_id);
 
       future.return(ctx);
