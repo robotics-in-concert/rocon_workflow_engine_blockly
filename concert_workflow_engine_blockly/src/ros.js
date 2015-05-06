@@ -184,7 +184,7 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
 
   var timeout_h = null;
   var timedout = false;
-  var _onResult = function(x){ if(!timedout){ clearTimeout(tiemout_h); onResult(x);  } };
+  var _onResult = function(x){ if(!timedout){ clearTimeout(timeout_h); onResult(x);  } };
   var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
 
   goal.on('feedback', _onFeedback);
