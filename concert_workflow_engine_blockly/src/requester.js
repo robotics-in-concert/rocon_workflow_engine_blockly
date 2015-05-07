@@ -279,6 +279,7 @@ Requester.prototype.send_allocation_request = function(res, timeout){
     var options = timeout;
     timeout = options.timeout;
   };
+  timeout = +timeout;
   var that = this;
   var uuid = this.new_request([res]);
   this.send_requests();

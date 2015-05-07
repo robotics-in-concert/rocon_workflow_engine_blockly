@@ -166,7 +166,10 @@ Ros.prototype.unsubscribeAll = function(){
 
 Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options){
   var options = _.defaults(options || {}, {
+    timeout: -1
   });
+  options.timeout = +options.timeout;
+
 
   logger.info("run action : " +  name + " " + type + " " + JSON.stringify(goal));
 
