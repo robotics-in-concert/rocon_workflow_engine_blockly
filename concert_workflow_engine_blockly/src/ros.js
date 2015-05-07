@@ -197,7 +197,7 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   if(options.timeout >= 0){
     timeout_h = setTimeout(function(){
       timedout = true;
-      onTimeout();
+      onTimeout(goal);
     }, options.timeout);
   }
 
