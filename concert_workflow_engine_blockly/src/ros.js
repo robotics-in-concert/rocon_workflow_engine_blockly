@@ -34,6 +34,8 @@ var Ros = function(opts){
         that.emit('status.ready');
       });
       connected = true;
+
+
     });
     ros.on('close', function(){
       logger.info('ros closed');
@@ -144,8 +146,9 @@ Ros.prototype.publish = function(topic, type, msg){
 
 
 Ros.prototype.getParam = function(key, callback){
+  var that = this;
   return new Promise(function(resolve, reject){
-    var param = new ROSLIB.Param({ros: this.underlying, name: key});
+    var param = new ROSLIB.Param({ros: that.underlying, name: key});
     param.get(resolve);
   });
 };
