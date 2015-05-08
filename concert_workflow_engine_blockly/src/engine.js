@@ -92,7 +92,7 @@ Engine.prototype.getServiceParameter = function(service_name, key){
 
   this.ros.getParam(['/services', service_name, key].join('/'))
     .then(function(result){
-      future.result(result);
+      future.return(result);
     });
   return future.wait();
 
