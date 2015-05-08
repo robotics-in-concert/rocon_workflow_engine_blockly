@@ -182,6 +182,7 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
     actionName : type
   });
 
+  var param_goal = goal;
   var goal = new ROSLIB.Goal({
     actionClient : ac,
     goalMessage : goal
@@ -200,7 +201,7 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   if(options.timeout >= 0){
     timeout_h = setTimeout(function(){
       timedout = true;
-      onTimeout(goal);
+      onTimeout(param_goal);
     }, options.timeout);
   }
 
