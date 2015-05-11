@@ -26,6 +26,8 @@ options = _.defaults(args, {
 })
 
 
+process.setMaxListeners(1024);
+
 
 
 
