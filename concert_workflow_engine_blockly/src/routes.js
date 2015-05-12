@@ -8,7 +8,7 @@ module.exports = function(app){
     res.render('engine');
   });
   app.get('/prezi', function(req, res){
-    res.render('prezi');
+    res.render('prezi', {query: req.query});
   });
 
   app.get('/ping', function(req, res){
