@@ -81,7 +81,6 @@ Engine.prototype.sleep = function(ms){
     }, ms);
     return future;
   };
-
   _sleep(ms).wait();
 
 };
@@ -123,6 +122,7 @@ Engine.prototype.runService = function(name, type, request){
 };
 
 Engine.prototype.runCode = function(code){
+  
   code = ["var f = Fiber(function(){ try{ ", code , " }catch(error_in_fiber){ console.log('error in fiber', error_in_fiber); throw error_in_fiber }}); f.run(); f"].join("\n");
   code = Utils.js_beautify(code);
   this.debug("---------------- scripts -----------------");
@@ -292,7 +292,7 @@ Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, 
   this.ros.run_action(name, type, goal, 
     function(items){ 
       onResult(items); 
-      engine.releaseResource(ctx);
+      //engine.releaseResource(ctx);
     }, 
     function(items){ onFeedback(items) },
     onTimeout,
@@ -331,9 +331,10 @@ Engine.prototype.clear = function(){
   this.executions = [];
 
   var proms = _.map(this.my_dynamic_resource_ids, function(rid){
+    that.log('engine clear', requester_id);
     return process_send2({cmd: 'release_resource', requester_id: rid});
-
   });
+  
   return Promise.all(proms).then(function(){
     // that.unsubscribeAll();
     that.log('engine cleared');
