@@ -20,16 +20,26 @@ process_send2 = function(data){
   var reqId = UUID.v4().replace(/-/g, "")
   data.__request_id = reqId;
 
-
   return new Promise(function(resolve, reject){
-    process.on('message', function(payload){
+    var ff = function(payload){
       if(payload.cmd == 'return.'+reqId){
         resolve(payload.result);
+        process.removeListener('message', ff);
       };
-    });
+    };
+    process.on('message', ff);
     process.send(data);
-
   });
+
+  // return new Promise(function(resolve, reject){
+  //   process.on('message', function(payload){
+  //     if(payload.cmd == 'return.'+reqId){
+  //       resolve(payload.result);
+  //     };
+  //   });
+  //   process.send(data);
+
+  // });
 
 
 };
