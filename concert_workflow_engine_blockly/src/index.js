@@ -25,11 +25,7 @@ options = _.defaults(args, {
   }
 })
 
-
-process.setMaxListeners(1024);
-
-
-
+process.setMaxListeners(0);
 
 module.exports = function(){
   setupLogger();
