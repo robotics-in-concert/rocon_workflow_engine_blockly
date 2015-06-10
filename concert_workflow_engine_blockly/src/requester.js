@@ -410,11 +410,11 @@ Requester.prototype.handleFeedback = function(requests){
 
     if(req.status == STATUS_GRANTED){
       // handle granted resource
-      logger.info('granted ', uuid.toString());
+      logger.debug('granted ', uuid.toString());
       that.ee.emit('granted', uuid);
 
     }else if(req.status == STATUS_CLOSED){
-      logger.info('closed ', uuid.toString());
+      logger.debug('closed ', uuid.toString());
       that.ee.emit('closed', uuid);
     };
 

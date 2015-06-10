@@ -9,7 +9,7 @@ var _ = require('lodash'),
 
 var Ros = function(opts){
 
-  EventEmitter2.call(this, {wildcard: true});
+  EventEmitter2.call(this, {wildcard: true, maxListeners:1024});
   var that = this;
   var options = this.options = opts;
 
@@ -115,18 +115,17 @@ Ros.prototype.startPublishLoop = function(){
       return;
     }
 
-    var topic = new ROSLIB.Topic({
-      ros : that.underlying,
-      name : data.topic,
-      messageType : data.type
-    });
+      var topic = new ROSLIB.Topic({
+        ros : that.underlying,
+        name : data.topic,
+        messageType : data.type
+      });
 
-    var msg = new ROSLIB.Message(data.msg);
+      var msg = new ROSLIB.Message(data.msg);
 
-
-    // And finally, publish.
-    topic.publish(msg);
-    logger.debug("published "+topic.name);
+      // And finally, publish.
+      topic.publish(msg);
+    logger.debug("[startPublishLoop]: "+topic.name);
     that.emit('publish', {name: data.name, type: data.type, payload: data.msg});
 
   }, this.options.publish_delay);
@@ -173,7 +172,6 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   });
   options.timeout = +options.timeout;
 
-
   logger.info("run action : " +  name + " " + type + " " + JSON.stringify(goal));
 
   var ac = new ROSLIB.ActionClient({
@@ -183,21 +181,37 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   });
 
   var param_goal = goal;
-  var goal = new ROSLIB.Goal({
+  var ros_goal = new ROSLIB.Goal({
     actionClient : ac,
-    goalMessage : goal
+    goalMessage : param_goal
   });
 
 
   var timeout_h = null;
   var timedout = false;
+
+  var timer_goal_sender = "";
+  var is_goal_sended = false;
+
   var _onResult = function(x){ if(!timedout){ clearTimeout(timeout_h); onResult(x);  } };
   var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
+  var _onStatus = function(x){ if(!timedout){ is_goal_sended = true; }};
 
-  goal.on('feedback', _onFeedback);
-  goal.on('result', _onResult);
+  ros_goal.on('feedback', _onFeedback);
+  ros_goal.on('result', _onResult);
+  ros_goal.on('status', _onStatus);
 
-  goal.send();
+  timer_goal_sender = setInterval(function(){
+    if(!is_goal_sended){
+      ros_goal.send();
+    }
+    else{
+      console.info("send goal");
+      clearInterval(timer_goal_sender);
+      timer_goal_sender = "";
+    }
+  }, 2000);
+
   if(options.timeout >= 0){
     timeout_h = setTimeout(function(){
       timedout = true;
