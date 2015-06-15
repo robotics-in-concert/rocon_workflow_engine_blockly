@@ -13,6 +13,6 @@ parameters:
   - name: action_delay
     value: 2000
   - name: publish_delay
-    value: 100
+    value: 200
   - name: log_level
     value: info

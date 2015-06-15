@@ -148,7 +148,6 @@ Engine.prototype.waitForTopicsReady = function(required_topics){
 
 Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var engine = this;
-  var delay = this.options.action_delay;
   var fiber = Fiber.current;
   var old_remapped_topics_length = -1;
 
@@ -164,14 +163,11 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
 
         if(remapped_topics.length >= required_topics.length){
           clearInterval(timer);
-
-          setTimeout(function(){ 
-            if(!fiber.stopped){
-              fiber.run(); 
-            }else{
-              fiber.throwInto('stopped');
-            }
-          }, delay);
+          if(!fiber.stopped){
+            fiber.run();
+          }else{
+            fiber.throwInto('stopped');
+          }
         }
       });
     }else{

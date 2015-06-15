@@ -51,6 +51,7 @@ var Ros = function(opts){
 
 
   this.subscribe_topics = [];
+  this.publisher_list = {};
   this.publish_queue = [];
   this.publish_loop_timer = null;
 
@@ -114,21 +115,31 @@ Ros.prototype.startPublishLoop = function(){
     if(!data){
       return;
     }
-
-      var topic = new ROSLIB.Topic({
-        ros : that.underlying,
-        name : data.topic,
-        messageType : data.type
-      });
+      var topic = null;
+      if (that.publisher_list.hasOwnProperty(data.topic) === true){
+        topic = that.publisher_list[data.topic];
+      }
+      else{
+        topic = new ROSLIB.Topic({
+          ros : that.underlying,
+          name : data.topic,
+          messageType : data.type
+        });
+        that.publisher_list[data.topic] = topic;
+      }
 
       var msg = new ROSLIB.Message(data.msg);
+      logger.debug("[startPublishLoop]: " + topic.name + "create");
 
-      // And finally, publish.
-      topic.publish(msg);
-    logger.debug("[startPublishLoop]: "+topic.name);
-    that.emit('publish', {name: data.name, type: data.type, payload: data.msg});
+      setTimeout(function(){
+        // And finally, publish.
+        topic.publish(msg);
+        logger.debug("[startPublishLoop]: " + topic.name);
+        that.emit('publish', {name: data.name, type: data.type, payload: data.msg});
+      }, that.options.publish_delay);
 
-  }, this.options.publish_delay);
+  }, that.options.publish_delay);
+
   logger.info('publish loop started');
 };
 
@@ -167,6 +178,8 @@ Ros.prototype.unsubscribeAll = function(){
 };
 
 Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options){
+  var action_delay = this.options.action_delay || 2000;
+
   var options = _.defaults(options || {}, {
     timeout: -1
   });
@@ -203,14 +216,15 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
 
   timer_goal_sender = setInterval(function(){
     if(!is_goal_sended){
+      console.info("Sending goal processing untill receiving");
       ros_goal.send();
     }
     else{
-      console.info("send goal");
+      console.info("Finish sending goal processing");
       clearInterval(timer_goal_sender);
       timer_goal_sender = "";
     }
-  }, 2000);
+  }, action_delay);
 
   if(options.timeout >= 0){
     timeout_h = setTimeout(function(){
