@@ -137,57 +137,46 @@ Engine.prototype.runCode = function(code){
     this.emit('status.error', e.message);
   }
 
-
 };
-
-
 
 // public - promise version
 Engine.prototype.waitForTopicsReady = function(required_topics){
   return this.ros.waitForTopicsReady(required_topics);
 };
 
-
 // private - fiber version
 
 Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var engine = this;
-  var delay = this.options.action_delay;
-
-
-
   var fiber = Fiber.current;
+  var old_remapped_topics_length = -1;
 
   var timer = setInterval(function(){
     if(!fiber.stopped){
       engine.ros.underlying.getTopics(function(topics){
         var remapped_topics = R.filter(function(t){ return R.contains(t, required_topics); })(topics);
-        console.log('topic count check : ', [remapped_topics.length, required_topics.length].join("/"), remapped_topics, required_topics);
+
+        if (old_remapped_topics_length != remapped_topics.length){
+          console.log('topic count check : ', [remapped_topics.length, required_topics.length].join("/"), remapped_topics);
+          old_remapped_topics_length = remapped_topics.length;
+        }
 
         if(remapped_topics.length >= required_topics.length){
           clearInterval(timer);
-          setTimeout(function(){ 
-            if(!fiber.stopped){
-              fiber.run(); 
-            }else{
-              fiber.throwInto('stopped');
-            }
-          }, delay);
+          if(!fiber.stopped){
+            fiber.run();
+          }else{
+            fiber.throwInto('stopped');
+          }
         }
       });
     }else{
       clearInterval(timer);
       console.log('running fiber will stop');
       fiber.throwInto('stopped');
-
     }
-
   }, 1000);
-
-
-
   Fiber.yield();
-
 };
 
 
@@ -253,11 +242,7 @@ Engine.prototype._scheduled = function(rapp, uri, remappings, parameters, topics
             }
           });
         }, 1000);
-
-
       });
-
-
       topics_ready.then(function(){
         callback(r);
       });
@@ -280,26 +265,20 @@ Engine.prototype.decResourceRefCount = function(rid){
 };
 
 
+
+
 Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, onFeedback, onTimeout, options){
   var name = _.detect(ctx.remappings, {remap_from: name}).remap_to;
   var engine = this;
 
-  var required_topics = _.map(["feedback", "result", "status"], function(suffix){ return name + "/" + suffix});
-  engine.log('action : ', ctx, required_topics, name);
-
-
+  var required_topics = _.map(["feedback", "result", "status", "goal", "cancel"], function(suffix){ return name + "/" + suffix});
   engine._waitForTopicsReadyF(required_topics);
   this.ros.run_action(name, type, goal, 
-    function(items){ 
-      onResult(items); 
-      //engine.releaseResource(ctx);
-    }, 
-    function(items){ onFeedback(items) },
+    function(items){ onResult(items); },
+    function(items){ onFeedback(items); },
     onTimeout,
     options
-  );
-
-  
+  ); 
 
 };
 
@@ -315,11 +294,6 @@ Engine.prototype.scheduledPublish = function(ctx, topic, type, msg){
   this.ros.publish(name, type, msg);
 
 };
-
-
-
-
-
 
 Engine.prototype.clear = function(){
   var that = this;

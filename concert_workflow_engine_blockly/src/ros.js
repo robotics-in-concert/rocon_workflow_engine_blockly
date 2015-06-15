@@ -9,7 +9,7 @@ var _ = require('lodash'),
 
 var Ros = function(opts){
 
-  EventEmitter2.call(this, {wildcard: true});
+  EventEmitter2.call(this, {wildcard: true, maxListeners:1024});
   var that = this;
   var options = this.options = opts;
 
@@ -51,6 +51,7 @@ var Ros = function(opts){
 
 
   this.subscribe_topics = [];
+  this.publisher_list = {};
   this.publish_queue = [];
   this.publish_loop_timer = null;
 
@@ -114,22 +115,31 @@ Ros.prototype.startPublishLoop = function(){
     if(!data){
       return;
     }
+      var topic = null;
+      if (that.publisher_list.hasOwnProperty(data.topic) === true){
+        topic = that.publisher_list[data.topic];
+      }
+      else{
+        topic = new ROSLIB.Topic({
+          ros : that.underlying,
+          name : data.topic,
+          messageType : data.type
+        });
+        that.publisher_list[data.topic] = topic;
+      }
 
-    var topic = new ROSLIB.Topic({
-      ros : that.underlying,
-      name : data.topic,
-      messageType : data.type
-    });
+      var msg = new ROSLIB.Message(data.msg);
+      logger.debug("[startPublishLoop]: " + topic.name + "create");
 
-    var msg = new ROSLIB.Message(data.msg);
+      setTimeout(function(){
+        // And finally, publish.
+        topic.publish(msg);
+        logger.debug("[startPublishLoop]: " + topic.name);
+        that.emit('publish', {name: data.name, type: data.type, payload: data.msg});
+      }, that.options.publish_delay);
 
+  }, that.options.publish_delay);
 
-    // And finally, publish.
-    topic.publish(msg);
-    logger.debug("published "+topic.name);
-    that.emit('publish', {name: data.name, type: data.type, payload: data.msg});
-
-  }, this.options.publish_delay);
   logger.info('publish loop started');
 };
 
@@ -168,11 +178,12 @@ Ros.prototype.unsubscribeAll = function(){
 };
 
 Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options){
+  var action_delay = this.options.action_delay || 2000;
+
   var options = _.defaults(options || {}, {
     timeout: -1
   });
   options.timeout = +options.timeout;
-
 
   logger.info("run action : " +  name + " " + type + " " + JSON.stringify(goal));
 
@@ -183,21 +194,38 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   });
 
   var param_goal = goal;
-  var goal = new ROSLIB.Goal({
+  var ros_goal = new ROSLIB.Goal({
     actionClient : ac,
-    goalMessage : goal
+    goalMessage : param_goal
   });
 
 
   var timeout_h = null;
   var timedout = false;
+
+  var timer_goal_sender = "";
+  var is_goal_sended = false;
+
   var _onResult = function(x){ if(!timedout){ clearTimeout(timeout_h); onResult(x);  } };
   var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
+  var _onStatus = function(x){ if(!timedout){ is_goal_sended = true; }};
 
-  goal.on('feedback', _onFeedback);
-  goal.on('result', _onResult);
+  ros_goal.on('feedback', _onFeedback);
+  ros_goal.on('result', _onResult);
+  ros_goal.on('status', _onStatus);
 
-  goal.send();
+  timer_goal_sender = setInterval(function(){
+    if(!is_goal_sended){
+      console.info("Sending goal processing untill receiving");
+      ros_goal.send();
+    }
+    else{
+      console.info("Finish sending goal processing");
+      clearInterval(timer_goal_sender);
+      timer_goal_sender = "";
+    }
+  }, action_delay);
+
   if(options.timeout >= 0){
     timeout_h = setTimeout(function(){
       timedout = true;
