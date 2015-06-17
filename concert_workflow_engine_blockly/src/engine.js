@@ -151,6 +151,9 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var fiber = Fiber.current;
   var old_remapped_topics_length = -1;
 
+  var topic_wait_timeout = this.options.topic_wait_timeout;
+
+  var wait_timeout_timer = null;
   var timer = setInterval(function(){
     if(!fiber.stopped){
       engine.ros.underlying.getTopics(function(topics){
@@ -165,6 +168,7 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
           clearInterval(timer);
           if(!fiber.stopped){
             fiber.run();
+            clearTimeout(wait_timeout_timer);
           }else{
             fiber.throwInto('stopped');
           }
@@ -172,10 +176,17 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
       });
     }else{
       clearInterval(timer);
+      clearTimeout(wait_timeout_timer);
       console.log('running fiber will stop');
       fiber.throwInto('stopped');
     }
   }, 1000);
+
+  wait_timeout_timer = setTimeout(function(){
+    clearInterval(timer);
+    fiber.run();
+  }, topic_wait_timeout);
+
   Fiber.yield();
 };
 
