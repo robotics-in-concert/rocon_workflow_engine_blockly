@@ -175,7 +175,12 @@ Ros.prototype.unsubscribeAll = function(){
   this.subscribe_topics = [];
 };
 
-Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options){
+Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTimeout, options, isWaitForTopicsTimeout){
+  if (isWaitForTopicsTimeout){
+    onTimeout(goal);
+    return;
+  }
+
   var action_delay = this.options.action_delay || 2000;
 
   var options = _.defaults(options || {}, {

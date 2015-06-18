@@ -42,6 +42,7 @@ var Engine = function(opts){
   this.executions = [];
   this.topics = [];
   this.my_dynamic_resource_ids = []; // dynamic resources id allocated in this engine.
+  this.isWaitForTopicsTimeout = false;
 
 
   _.defer(function(){
@@ -151,7 +152,8 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var fiber = Fiber.current;
   var old_remapped_topics_length = -1;
 
-  var topic_wait_timeout = this.options.topic_wait_timeout;
+  //var topic_wait_timeout = this.options.topic_wait_timeout;
+  var topic_wait_timeout = 600000;
 
   var wait_timeout_timer = null;
   var timer = setInterval(function(){
@@ -167,6 +169,8 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
         if(remapped_topics.length >= required_topics.length){
           clearInterval(timer);
           if(!fiber.stopped){
+            logger.info('all topic received: engine resume');
+            engine.isWaitForTopicsTimeout = false;
             fiber.run();
             clearTimeout(wait_timeout_timer);
           }else{
@@ -183,6 +187,8 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
   }, 1000);
 
   wait_timeout_timer = setTimeout(function(){
+    logger.info('wait timeout timer called: engine resume');
+    engine.isWaitForTopicsTimeout = true;
     clearInterval(timer);
     fiber.run();
   }, topic_wait_timeout);
@@ -284,13 +290,15 @@ Engine.prototype.runScheduledAction = function(ctx, name, type, goal, onResult, 
 
   var required_topics = _.map(["feedback", "result", "status", "goal", "cancel"], function(suffix){ return name + "/" + suffix});
   engine._waitForTopicsReadyF(required_topics);
+  
   this.ros.run_action(name, type, goal, 
     function(items){ onResult(items); },
     function(items){ onFeedback(items); },
     onTimeout,
-    options
-  ); 
-
+    options,
+    engine.isWaitForTopicsTimeout
+  )
+  
 };
 
 Engine.prototype.scheduledSubscribe = function(ctx, topic, type, callback){
