@@ -129,8 +129,6 @@ Ros.prototype.startPublishLoop = function(){
       }
 
       var msg = new ROSLIB.Message(data.msg);
-      logger.debug("[startPublishLoop]: " + topic.name + "create");
-
       setTimeout(function(){
         // And finally, publish.
         topic.publish(msg);
@@ -206,7 +204,7 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
   var timer_goal_sender = "";
   var is_goal_sended = false;
 
-  var _onResult = function(x){ if(!timedout){ clearTimeout(timeout_h); onResult(x);  } };
+  var _onResult = function(x){ if(!timedout){ clearTimeout(timeout_h);} onResult(x); };
   var _onFeedback = function(x){ if(!timedout){ onFeedback(x);} };
   var _onStatus = function(x){ if(!timedout){ is_goal_sended = true; }};
 
@@ -216,11 +214,11 @@ Ros.prototype.run_action = function(name, type, goal, onResult, onFeedback, onTi
 
   timer_goal_sender = setInterval(function(){
     if(!is_goal_sended){
-      console.info("Sending goal processing untill receiving");
+      logger.info("Sending goal processing untill receiving");
       ros_goal.send();
     }
     else{
-      console.info("Finish sending goal processing");
+      logger.info("Finish sending goal processing");
       clearInterval(timer_goal_sender);
       timer_goal_sender = "";
     }
