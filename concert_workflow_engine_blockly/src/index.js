@@ -19,6 +19,7 @@ options = _.defaults(args, {
   log_level: 'info',
   publish_delay: 100,
   action_delay: 2000,
+  topic_wait_timeout: 300000,
   ros: {
     retries: 0,
     retry_interval: 3000

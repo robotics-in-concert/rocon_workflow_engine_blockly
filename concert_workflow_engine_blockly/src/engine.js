@@ -152,8 +152,7 @@ Engine.prototype._waitForTopicsReadyF = function(required_topics){
   var fiber = Fiber.current;
   var old_remapped_topics_length = -1;
 
-  //var topic_wait_timeout = this.options.topic_wait_timeout;
-  var topic_wait_timeout = 600000;
+  var topic_wait_timeout = this.options.topic_wait_timeout;
 
   var wait_timeout_timer = null;
   var timer = setInterval(function(){
@@ -211,8 +210,8 @@ Engine.prototype.allocateResource = function(rapp, uri, remappings, parameters, 
   process_send2({action: 'allocate_resource', key: key, rapp: rapp, uri: uri, remappings: remappings, parameters: parameters, options: options})
     .then(function(ctx){
 
-      if(ctx && allocation_type == 'dynamic')
-        engine.my_dynamic_resource_ids.push(ctx.req_id);
+      //if(ctx && allocation_type == 'dynamic')
+      engine.my_dynamic_resource_ids.push(ctx.req_id);
 
       future.return(ctx);
     });
@@ -324,7 +323,7 @@ Engine.prototype.clear = function(){
   this.executions = [];
 
   var proms = _.map(this.my_dynamic_resource_ids, function(rid){
-    that.log('engine clear', requester_id);
+    that.log('engine clear');
     return process_send2({cmd: 'release_resource', requester_id: rid});
   });
   

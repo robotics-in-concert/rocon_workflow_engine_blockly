@@ -100,13 +100,17 @@ EngineManager.prototype.enableWorkflows = function(options){
 
     }
 
-
-
-
     
   }else{
     var x = _.find(this.engine_processes, {name: payload.service_name})
-    this.killEngine(x.process.pid)
+    if(x !== undefined){
+      this.killEngine(x.process.pid)
+    }
+    else{
+      logger.log("Engine is already dead");
+    }
+      
+
   }
 
 
@@ -334,6 +338,13 @@ EngineManager.prototype._bindEvents = function(child){
       case 'socket_broadcast':
         that.io.of(msg.namespace).emit(msg.key, msg.msg);
         result = true
+        break;
+      case 'closed':
+        console.log("[engine manager]: closed")
+        break;
+      
+      case 'granted':
+        console.log("[engine manager]: granted")
         break;
 
       default:
