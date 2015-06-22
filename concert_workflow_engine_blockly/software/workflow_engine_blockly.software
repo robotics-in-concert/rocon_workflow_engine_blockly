@@ -14,5 +14,7 @@ parameters:
     value: 2000
   - name: publish_delay
     value: 200
+  - name: topic_wait_timeout
+    value: 600000
   - name: log_level
     value: info
