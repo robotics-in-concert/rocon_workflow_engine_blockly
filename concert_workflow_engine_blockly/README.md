@@ -81,11 +81,11 @@ npm install
 1. set environment variables below
 
 <!--
-export CONCERT_COMPOSER_BLOCKLY_SERVER_PORT=9999
-export CONCERT_COMPOSER_BLOCKLY_ROSBRIDGE_URL=ws://127.0.0.1:9090
-export CONCERT_COMPOSER_BLOCKLY_MONGO_URL=mongodb://localhost:27017/rocon_authoring
-export MSG_DATABASE=http://localhost:10000
+export CONCERT_WORKFLOW_ENGINE_SERVER_PORT=9999
+export CONCERT_WORKFLOW_ENGINE_ROSBRIDGE_URL=ws://127.0.0.1:9090
+export CONCERT_WORKFLOW_ENGINE_MONGO_URL=mongodb://localhost:27017/rocon_authoring
 export CONCERT_COMPOSER_BLOCKLY_DELAY_AFTER_TOPICS=2000
+export CONCERT_COMPOSER_BLOCKLY_PUBLISH_DELAY=100
 export CONCERT_COMPOSER_BLOCKLY_PUBLISH_DELAY=100
 export CONCERT_COMPOSER_BLOCKLY_LOG_LEVEL=info
 -->
@@ -101,6 +101,7 @@ export CONCERT_COMPOSER_BLOCKLY_LOG_LEVEL=info
   - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_DELAY_AFTER_TOPICS` : delay in milliseconds after required topics are ready (default: 2000)
   - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY` : delay in milliseconds betweeb publishs
   - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL` : log level (default, `info`)
+  - `CONCERT_WORKFLOW_ENGINE_BLOCKLY_TOPIC_WAIT_TIMEOUT` : action topic waiting timeout (default: 600000)
 
 
 ### Rosbridge
