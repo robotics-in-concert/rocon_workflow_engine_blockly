@@ -3,6 +3,7 @@ var spawn = require('child_process').spawn,
   Promise = require('bluebird'),
   Engine = require('./engine'),
   ResourceManager = require('./resource_manager'),
+  UIManager = require('./ui_manager'),
   util = require('util'),
   Requester = require('./requester').Requester,
   Resource = require('./requester').Resource,
@@ -23,6 +24,13 @@ var EngineManager = function(io, options){
   this.resource_pool_status = null;
   ros.once('status.ready', function(){
 
+    ros.subscribe('to-rocon-ui', 'std_msgs/String', function(payload){
+      console.log('to-rocon-ui received. payload : ', payload);
+
+      io.of('/ui')
+        .emit('data', payload);
+    });
+
     ros.subscribe('/concert/scheduler/resource_pool', 'scheduler_msgs/KnownResources', function(payload){
       logger.debug("POOL", payload);
       that.resource_pool_status = payload;
@@ -36,6 +44,7 @@ var EngineManager = function(io, options){
 
   });
 
+  this.ui_manager = new UIManager();
   this.resource_manager = new ResourceManager(ros);
   this.resource_manager.onAny(function(){
     that.broadcastResourcesInfo();
@@ -78,7 +87,10 @@ var EngineManager = function(io, options){
       }
 
     });
+  });
 
+  this.io.of('/ui').on('connection', function(socket){
+    logger.info('socket.io (/ui) client connected id:%s', socket.id);
   });
 
 };
@@ -345,6 +357,10 @@ EngineManager.prototype._bindEvents = function(child){
       
       case 'granted':
         console.log("[engine manager]: granted")
+        break;
+
+      case 'create_ui':
+        result = that.ui_manager.newUI(msg.name, msg.meta);
         break;
 
       default:

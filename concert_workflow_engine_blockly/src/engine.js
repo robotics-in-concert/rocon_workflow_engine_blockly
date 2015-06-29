@@ -402,6 +402,11 @@ Engine.prototype.reload = function(){
 };
 
 
+Engine.prototype.createUI = function(name, meta){
+  process_send2({cmd: 'create_ui', name: name, meta: meta});
+};
+
+
 
 
 module.exports = Engine;

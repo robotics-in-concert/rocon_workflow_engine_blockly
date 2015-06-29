@@ -1,0 +1,33 @@
+
+
+<link rel="import" href="../components/polymer/polymer.html">
+<!-- <link rel="import" href="../components/paper-button/paper-button.html"> -->
+<polymer-element name="rocon-button" role="button" attributes="rocon_id text">
+  <template>
+  <link rel="stylesheet" href="../css/rocon-component.css">
+  <style>
+  </style>
+  <!-- <div class="tile" flex center-justified center self-stretch on-tap="{{handleTap}}"> -->
+    <div id="rocon-component-wrapper" on-tap="{{handleTap}}">
+      <div align-center>{{text}}</div>
+    </div>
+  <!-- <div class="tile" center on-tap="{{handleTap}}"> -->
+    <!-- <content></content> -->
+  <!-- </div> -->
+  <!-- <paper-button flex raised>Button</paper-button></div> -->
+  </template>
+
+
+  <script>
+    Polymer('rocon-button', {
+      handleTap: function(){
+        this.fire('core-signal', {name: 'rocon-component', data: {'event': 'tap', id: this.rocon_id}});
+        console.log('core signal fired');
+
+
+
+      }
+    });
+  </script>
+
+</polymer-element>
