@@ -14,6 +14,6 @@
   <arg name="topic_wait_timeout"/>
   <arg name="log_level"/>
   <node pkg="concert_workflow_engine_blockly" type="concert_workflow_engine_blockly.js" name="workflow_engine_blockly" cwd="node" 
-    args="--port $(arg server_port) --rosbridge_port $(arg port) --rosbridge_address $(arg address) --action_delay $(arg action_delay) --publish_delay $(arg publish_delay) --topic_wait_timeout $(arg topic_wait_timeout) --log_level $(arg log_level)">
+    args="--port $(arg server_port) --rosbridge_port $(arg port) --rosbridge_address $(arg address) --action_delay $(arg action_delay) --publish_delay $(arg publish_delay) --topic_wait_timeout $(arg topic_wait_timeout) --log_level $(arg log_level) --standalone $(arg standalone)">
   </node>
 </launch>

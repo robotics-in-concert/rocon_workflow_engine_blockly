@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var ItemsSelectCtrl = require('../ctrls/items_select_ctrl');
 
-angular.module('engine-dashboard', [
+var app = angular.module('engine-dashboard', [
   'btford.socket-io',
   'ui.bootstrap',
   'ui.router'
@@ -22,6 +22,25 @@ angular.module('engine-dashboard', [
   .controller('dashboardResourcesController', DashboardResourcesController)
   .controller('engineDashboardController', EngineDashboardController);
 
+app.directive('onReadFile', function ($parse) {
+  return {
+    restrict: 'A',
+    scope: false,
+    link: function(scope, element, attrs) {
+            var fn = $parse(attrs.onReadFile);
+      element.on('change', function(onChangeEvent) {
+        var reader = new FileReader();
+        reader.onload = function(onLoadEvent) {
+          scope.$apply(function() {
+            fn(scope, {$fileContent:onLoadEvent.target.result});
+          });
+        };
+
+        reader.readAsText((onChangeEvent.srcElement || onChangeEvent.target).files[0]);
+      });
+    }
+  };
+});
 
 /* @ngInject */
 function resourceStatusLabel(){
@@ -120,6 +139,8 @@ function DashboardResourcesController($scope, socket, $location, $http, $modal){
 /* @ngInject */
 function EngineDashboardController($scope, socket, $location, $http, $modal){
 
+  $scope.content = null;
+
   socket.on('connect', function(){
   });
 
@@ -132,11 +153,19 @@ function EngineDashboardController($scope, socket, $location, $http, $modal){
 
   });
 
-
-
+  $scope.loadWorkflow = function($fileContent){
+        $scope.content = $fileContent;
+  };
 
   $scope.start = function(pid){
-    socket.emit('start', {items: null});
+    if ($scope.content === null){
+      content = null;
+    }
+    else{
+      content = [{'data': JSON.stringify($scope.content)}];
+    }
+
+    socket.emit('start', {items: content});
   };
 
   $scope.killEngine = function(pid){

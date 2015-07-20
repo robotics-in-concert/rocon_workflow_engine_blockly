@@ -18,3 +18,5 @@ parameters:
     value: 600000
   - name: log_level
     value: info
+  - name: standalone
+    value: false
