@@ -23,7 +23,8 @@ options = _.defaults(args, {
   ros: {
     retries: 0,
     retry_interval: 3000
-  }
+  },
+  standalone: true
 })
 
 process.setMaxListeners(0);

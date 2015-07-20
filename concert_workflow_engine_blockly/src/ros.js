@@ -30,9 +30,14 @@ var Ros = function(opts){
       logger.info('ros connected');
       that.emit('status.started');
 
-      that.waitForTopicsReady(['/concert/scheduler/requests']).then(function(){
+      if (options.standalone){
         that.emit('status.ready');
-      });
+      }
+      else{
+        that.waitForTopicsReady(['/concert/scheduler/requests']).then(function(){
+          that.emit('status.ready');
+        });
+      }
       connected = true;
 
 

@@ -7,13 +7,15 @@
     <arg name="address" value="$(arg address)"/>
   </include>
   
-  <!-- workflow engine blockly -->
+  <!-- workflow engine blockly arguments setting-->
   <arg name="server_port" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_SERVER_PORT)"/>
   <arg name="action_delay" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_ACTION_DELAY)"/>
   <arg name="publish_delay" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_PUBLISH_DELAY)"/>
   <arg name="topic_wait_timeout" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_TOPIC_WAIT_TIMEOUT)"/>
   <arg name="log_level" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_LOG_LEVEL)"/>
+  <arg name="standalone" default="$(env CONCERT_WORKFLOW_ENGINE_BLOCKLY_STANDALONE)"/>
+  <!-- workflow engine blockly -->
   <node pkg="concert_workflow_engine_blockly" type="concert_workflow_engine_blockly.js" name="workflow_engine_blockly" cwd="node" 
-    args="--port $(arg server_port) --rosbridge_port $(arg port) --rosbridge_address $(arg address) --action_delay $(arg action_delay) --publish_delay $(arg publish_delay) --topic_wait_timeout $(arg topic_wait_timeout) --log_level $(arg log_level)">
+    args="--port $(arg server_port) --rosbridge_port $(arg port) --rosbridge_address $(arg address) --action_delay $(arg action_delay) --publish_delay $(arg publish_delay) --topic_wait_timeout $(arg topic_wait_timeout) --log_level $(arg log_level) --standalone $(arg standalone)">
   </node>
 </launch>
